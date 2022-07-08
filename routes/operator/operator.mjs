@@ -18,6 +18,13 @@ import {getStatus} from "./other/get-status.mjs";
 import {changeOrderCourierRouter} from "./order/change-order-courier.mjs";
 import {changeOrderLocationRouter} from "./order/changeOrderLocation.mjs";
 import {changeOrderAddressRouter} from "./order/change-order-address.mjs";
+import { changeOrderDateRouter } from "./order/change-order-date.mjs";
+import { changeOrderDeliveryPriceRouter } from "./order/change-order-delivery-price.mjs";
+import { changeOrderProductRouter } from "./order/change-order-product.mjs";
+import { editOrderProductStatus } from "./order/edit-order-product-status.mjs";
+import { getOrdersRouter } from "./order/get-orders.mjs";
+import { getOrderProductStatusRouter } from "./order/get-order-product-status.mjs";
+import { getCouriersRouter } from "./other/get-courier.mjs";
 
 const operatorRouter = express.Router();
 
@@ -50,5 +57,12 @@ operatorRouter.use('/get-statuses',getStatus);
 operatorRouter.use('/change-order-courier',changeOrderCourierRouter);
 operatorRouter.use('/change-order-location',changeOrderLocationRouter);
 operatorRouter.use('/change-order-address',changeOrderAddressRouter);
+operatorRouter.use('/change-order-date',changeOrderDateRouter);
+operatorRouter.use('/change-order-delivery-price',changeOrderDeliveryPriceRouter);
+operatorRouter.use('/change-order-product',changeOrderProductRouter);
+operatorRouter.use('/change-order-product-status',editOrderProductStatus);
+operatorRouter.use('/get-orders',getOrdersRouter);
+operatorRouter.use('/get-order-product-status',getOrderProductStatusRouter);
+operatorRouter.use('/get-couriers',getCouriersRouter);
 
 export { operatorRouter };

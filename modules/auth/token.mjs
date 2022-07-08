@@ -13,8 +13,12 @@ export function verifyToken(req, res, next) {
                 console.log(err+"")
                 unauthorized(req, res);
             } else {
-                req.user = authData;
-                next();
+                if(typeof authData === "undefined" || authData == null) {
+                    unauthorized(req,res);
+                } else {
+                    req.user = authData;
+                    next();
+                }
             }
         })
     } else {

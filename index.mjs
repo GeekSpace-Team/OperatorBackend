@@ -3,6 +3,28 @@ import cors from 'cors';
 import { router } from './routes/router.mjs';
 import { Server } from "socket.io";
 import fs from 'fs';
+import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc  from 'swagger-jsdoc';
+
+
+const options = {
+    definition:{
+        openapi:"3.0.0",
+        info:{
+            title:"Operator Api",
+            version:"1.0.0",
+            description:"Operator Api from Shageldi Alyyew"
+        },
+        servers:[
+            {
+                url:"http://localhost:6415"
+            }
+        ]
+    },
+    apis:["./routes/*.js"]
+}
+
+const specs = swaggerJsdoc(options);
 
 const app = express();
 app.use(cors());
@@ -10,6 +32,9 @@ app.use('/public', express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', router);
+app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(specs));
+
+
 
 
 const server=app.listen(6415, () => {
