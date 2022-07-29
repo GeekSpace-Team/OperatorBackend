@@ -4,7 +4,8 @@ import {badRequest, response} from "../../../modules/response.mjs";
 import {generateUUID} from "../../../modules/uuid/uuid.mjs";
 import {db} from "../../../modules/database/connection.mjs";
 import format from "pg-format";
-import {addOrderProduct} from "../../../modules/query/operator-query.mjs";
+import {addOrderProduct, getCourierUniqueId} from "../../../modules/query/operator-query.mjs";
+import {sendMessage} from "../../../modules/push/push.mjs";
 
 const changeOrderProductRouter = express.Router();
 
@@ -37,8 +38,22 @@ changeOrderProductRouter.put('/',verifyToken,async(req,res)=>{
                );
            });
            await db.query(format(addOrderProduct, values))
-               .then(result => {
+               .then(async result => {
                    if (result.rows.length) {
+                       await db.query(getCourierUniqueId,[order_unique_id])
+                           .then(async result_courier=>{
+                               if(result_courier.rows.length){
+                                   await sendMessage(result_courier.rows[0].courier_unique_id,
+                                       `Sargyda täze haryt goşuldy!`,
+                                       `Täze goşulan haryt sany ${products.length}`,
+                                       {
+                                           order_unique_id:order_unique_id,
+                                           courier_unique_id:result_courier.rows[0].courier_unique_id,
+                                           user_unique_id:req.user.user.unique_id
+                                       });
+                               }
+                           })
+                           .catch(err=>{})
                        res.json(response(false,'success',result.rows));
                    } else {
                        badRequest(req,res);

@@ -25,6 +25,13 @@ import { editOrderProductStatus } from "./order/edit-order-product-status.mjs";
 import { getOrdersRouter } from "./order/get-orders.mjs";
 import { getOrderProductStatusRouter } from "./order/get-order-product-status.mjs";
 import { getCouriersRouter } from "./other/get-courier.mjs";
+import {addCourierRouter} from "./courier/add-courier.mjs";
+import {getCouriersBySellIdRouter} from "./courier/get-couriers-by-sell-id.mjs";
+import {addInbox} from "./inbox/add-inbox.mjs";
+import {removeInbox} from "./inbox/remove-inbox.mjs";
+import {markAsReadRouter} from "./inbox/mark-as-read.mjs";
+import {getInboxRouter} from "./inbox/get-inbox.mjs";
+import {getUnreadInboxCount} from "./inbox/get-unread-count.mjs";
 
 const operatorRouter = express.Router();
 
@@ -64,5 +71,12 @@ operatorRouter.use('/change-order-product-status',editOrderProductStatus);
 operatorRouter.use('/get-orders',getOrdersRouter);
 operatorRouter.use('/get-order-product-status',getOrderProductStatusRouter);
 operatorRouter.use('/get-couriers',getCouriersRouter);
+operatorRouter.use('/add-courier',addCourierRouter);
+operatorRouter.use('/get-couriers-full',getCouriersBySellIdRouter);
+operatorRouter.use('/add-inbox',addInbox);
+operatorRouter.use('/remove-inbox',removeInbox);
+operatorRouter.use('/mark-as-read',markAsReadRouter);
+operatorRouter.use('/get-inbox',getInboxRouter);
+operatorRouter.use('/get-unread-inbox-count',getUnreadInboxCount);
 
 export { operatorRouter };

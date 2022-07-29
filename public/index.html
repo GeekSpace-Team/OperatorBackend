@@ -18,11 +18,11 @@
 			 var socket = io.connect();
 			 
 			 function buttonClicked(){
-			   socket.emit('onCall',{phoneNumber:"+99362737222",code:"5435"});
+			   socket.emit('onInbox',{phoneNumber:"+99362737222",code:"5435"});
 			 }
 			 
 			 //when we receive buttonUpdate, do this
-			 socket.on('onCall', function(data){
+			 socket.on('onInbox', function(data){
                 document.getElementById("add_after_me").insertAdjacentHTML("afterend",
                 "<br/><br/><br/>"+JSON.stringify(data));
 			 });

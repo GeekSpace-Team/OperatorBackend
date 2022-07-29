@@ -16,6 +16,7 @@ getCouriersRouter.get('/',verifyToken,(req,res) => {
             db.query(getCouriers,[sell_point_id])
             .then(result2=>{
                 res.json(response(false,'success',result2.rows));
+                res.end();
             })
             .catch(err=>{
                 badRequest(req,res);

@@ -70,11 +70,12 @@ export const updateByLastCallState = `
 
 
 export const getMissedCall = `
-SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,
+SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,c.address_home,c.address_work,cs.value AS user_status,
 (SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number) AS all_call_history_count,
 (SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number) AS call_history
 FROM phone_call p 
 LEFT JOIN customer c ON c.phone_number=p.phone_number
+LEFT JOIN customer_status cs ON cs.id=c.status
 WHERE (p.call_state='${callStatus.REJECTED}' OR p.call_state='${callStatus.ACCEPTED_AFTER_REJECTED}') AND p.user_unique_id=$1
 %s
 %s 
@@ -93,11 +94,12 @@ WHERE (p.call_state='${callStatus.REJECTED}' OR p.call_state='${callStatus.ACCEP
 `;
 
 export const getAcceptedCall = `
-SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,
+SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,c.address_home,c.address_work,cs.value AS user_status,
 (SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number) AS all_call_history_count,
 (SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number) AS call_history
 FROM phone_call p 
 LEFT JOIN customer c ON c.phone_number=p.phone_number
+LEFT JOIN customer_status cs ON cs.id=c.status
 WHERE (p.call_state='${callStatus.ACCEPTED}') AND p.user_unique_id=$1
 %s
 %s 
@@ -384,5 +386,78 @@ FROM users WHERE unique_id=$1;`;
 
 export const getCouriers = `
 SELECT id, fullname, username, password, phone_number, status, created_at, updated_at, user_role, date_of_birthday, work_start_date, sell_point_id, unique_id
-	FROM public.courier WHERE sell_point_id IS NULL OR sell_point_id = $1;
+	FROM courier WHERE sell_point_id IS NULL OR sell_point_id = $1;
 `;
+
+export const addCourier = `
+INSERT INTO courier(
+    fullname, username, password, phone_number, status, created_at, updated_at, user_role, date_of_birthday, work_start_date, sell_point_id, unique_id)
+    VALUES ($1, $2, $3, $4, $5, now(), now(), $6, $7, $8, $9, $10) RETURNING *;
+`;
+
+export const getCouriersByFilter = `
+    SELECT c.*,
+    (SELECT COUNT(cc.id) FROM customer_order_courier_history cc WHERE cc.courier_unique_id=c.unique_id) as order_count,
+    (SELECT cc.customer_order_unique_id FROM customer_order_courier_history cc WHERE cc.courier_unique_id=c.unique_id ORDER BY cc.created_at DESC LIMIT 1) as last_order_id,
+    (SELECT oc.status FROM customer_order_status_history oc WHERE oc.customer_order_unique_id=
+    (SELECT cc.customer_order_unique_id FROM customer_order_courier_history cc WHERE cc.courier_unique_id=c.unique_id ORDER BY cc.created_at DESC LIMIT 1) ORDER BY oc.created_at DESC LIMIT 1) as last_order_status
+    FROM courier c WHERE c.sell_point_id=$1 OR c.sell_point_id IS NULL;
+`;
+
+export const addInboxQuery = `
+INSERT INTO inbox(
+        title, message, link_to_goal, is_read, is_delete, created_at, updated_at, unique_id, from_unique_id, to_unique_id)
+        VALUES ($1, $2, $3, $4, $5, now(), now(), $6, $7, $8) RETURNING *;
+`;
+
+export const deleteInbox = `
+UPDATE inbox
+    SET  is_delete=true, updated_at=now()
+    WHERE unique_id=$1 RETURNING *;
+`;
+
+export const markAsRead = `
+UPDATE inbox
+    SET  is_read=true, updated_at=now()
+    WHERE unique_id=$1 RETURNING *;
+`;
+
+export const getInboxQuery = `
+    SELECT i.id, 
+    i.title, i.message, i.link_to_goal, 
+    i.is_read, i.is_delete, i.created_at, 
+    i.updated_at, i.unique_id, i.from_unique_id, i.to_unique_id,
+    u.fullname as sender_name,u2.fullname as receiver_name, c.fullname as sender_courier_name, c2.fullname as receiver_courier_name
+    FROM inbox i
+    LEFT JOIN users u ON u.unique_id = i.from_unique_id
+    LEFT JOIN users u2 ON u2.unique_id = i.to_unique_id
+    LEFT JOIN courier c ON c.unique_id = i.from_unique_id
+    LEFT JOIN courier c2 ON c2.unique_id = i.to_unique_id
+    WHERE (from_unique_id = $1 OR to_unique_id = $1) AND is_delete=false
+    ORDER BY created_at DESC
+    LIMIT $2 OFFSET ($3 - 1) * $2;
+`;
+
+export const getInboxCountQuery = `
+    SELECT id
+    FROM inbox 
+    WHERE (from_unique_id = $1 OR to_unique_id = $1) AND is_delete=false
+    ORDER BY created_at DESC
+`;
+
+export const getUnReadInboxCountQuery = `
+    SELECT count(id) as unread_inbox_count
+    FROM inbox 
+    WHERE (from_unique_id = $1 OR to_unique_id = $1) AND is_read=false
+`;
+
+export const getFcmToken = `
+    SELECT DISTINCT token FROM fcm_token WHERE user_unique_id=$1;
+`;
+
+export const getCourierUniqueId = `
+    SELECT courier_unique_id
+    FROM customer_order_courier_history WHERE customer_order_unique_id=$1 ORDER BY updated_at DESC LIMIT 1;
+`;
+
+

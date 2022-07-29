@@ -49,6 +49,10 @@ io.on("connection", (client) => {
         console.log(data)
         io.emit('onCall', data);
     });
+    client.on('onInbox', (data)=> {
+        console.log(data)
+        io.emit('onInbox', data);
+    });
 });
 
 app.get('/socket-test', function(req, res) {
