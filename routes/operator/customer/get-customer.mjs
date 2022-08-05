@@ -5,6 +5,7 @@ import { db } from '../../../modules/database/connection.mjs';
 import { getCustomers, getCustomersPageCount } from '../../../modules/query/operator-query.mjs';
 import { badRequest,response } from '../../../modules/response.mjs';
 
+
 const getCustomerRouter = express.Router();
 
 getCustomerRouter.post('/',verifyToken,(req, res) => {
