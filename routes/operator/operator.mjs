@@ -32,6 +32,7 @@ import {removeInbox} from "./inbox/remove-inbox.mjs";
 import {markAsReadRouter} from "./inbox/mark-as-read.mjs";
 import {getInboxRouter} from "./inbox/get-inbox.mjs";
 import {getUnreadInboxCount} from "./inbox/get-unread-count.mjs";
+import {getAllCustomerRouter} from "./customer/get-all-customer.mjs";
 
 const operatorRouter = express.Router();
 
@@ -78,5 +79,6 @@ operatorRouter.use('/remove-inbox',removeInbox);
 operatorRouter.use('/mark-as-read',markAsReadRouter);
 operatorRouter.use('/get-inbox',getInboxRouter);
 operatorRouter.use('/get-unread-inbox-count',getUnreadInboxCount);
+operatorRouter.use('/get-all-customer',getAllCustomerRouter);
 
 export { operatorRouter };

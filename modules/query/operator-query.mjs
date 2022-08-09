@@ -460,6 +460,11 @@ export const getCourierUniqueId = `
     FROM customer_order_courier_history WHERE customer_order_unique_id=$1 ORDER BY updated_at DESC LIMIT 1;
 `;
 
+export const getAllCustomer=`
+SELECT id, fullname, phone_number, question_mode, find_us, address_home, address_work, information, created_at, updated_at, unique_id, operator_unique_id, speak_mode, status, speak_tone, speak_accent, focus_word
+    FROM public.customer;
+`;
+
 
 
 
