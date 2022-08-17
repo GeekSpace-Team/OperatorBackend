@@ -50,4 +50,13 @@ export const callStatus = {
     ACCEPTED_AFTER_REJECTED:4
 };
 
+export const INFO_TYPES = {
+    CUSTOMER_STATUS:'customer_status',
+    SPEAK_MODE:'speak_mode',
+    SPEAK_ACCENT:'speak_accent',
+    FOCUS_WORD:'focus_word',
+    SPEAK_TONE:'speak_tone',
+    FIND_US:'find_us'
+};
+
 // LIMIT $1 OFFSET ($2 - 1) * $1;

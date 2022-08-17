@@ -1,3 +1,5 @@
+import { orderStatus } from "../constant/constant.mjs";
+
 export const loginQuery = `
 SELECT u.*,r.name as role_name,
 (SELECT array_to_json(array_agg(p.*)) FROM role_permission p WHERE p.user_role=u.user_role) as user_permissions
@@ -18,7 +20,11 @@ SELECT o.id,
     (SELECT array_to_json(array_agg(ca.*)) FROM customer_order_address_history ca WHERE ca.customer_order_unique_id=o.unique_id) as order_address_history,
     (SELECT array_to_json(array_agg(cd.*)) FROM customer_order_date_history cd WHERE cd.customer_order_unique_id=o.unique_id) as order_date_history,
     (SELECT array_to_json(array_agg(cp.*)) FROM customer_order_delivery_price cp WHERE cp.customer_order_unique_id=o.unique_id) as order_price_history,
-    (SELECT array_to_json(array_agg(cl.*)) FROM customer_order_location_history cl WHERE cl.customer_order_unique_id=o.unique_id) as order_location_history
+    (SELECT array_to_json(array_agg(cl.*)) FROM customer_order_location_history cl WHERE cl.customer_order_unique_id=o.unique_id) as order_location_history,
+    (SELECT CASE WHEN s.status IS NULL THEN '${orderStatus.COURIER_PENDING}'
+                 ELSE s.status
+            END
+        FROM customer_order_status_history s WHERE s.customer_order_unique_id=o.unique_id ORDER BY s.created_at DESC LIMIT 1) as current_status
     FROM customer_order o
     LEFT JOIN customer c ON c.unique_id=o.customer_unique_id
     WHERE (SELECT ch.status FROM customer_order_status_history ch 

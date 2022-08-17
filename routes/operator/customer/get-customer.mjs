@@ -54,7 +54,7 @@ getCustomerRouter.post('/',verifyToken,(req, res) => {
                 let countQuery=format(getCustomersPageCount,whereQuery,orderByQuery);
                 db.query(countQuery)
                 .then(result_count=>{
-                    let page_count = Math.round(result_count.rows.length/perPage);
+                    let page_count = Math.ceil(result_count.rows.length/perPage);
                     if(page_count <= 0){
                         page_count = 1;
                     }

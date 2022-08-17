@@ -448,7 +448,7 @@ export const getInboxCountQuery = `
 export const getUnReadInboxCountQuery = `
     SELECT count(id) as unread_inbox_count
     FROM inbox 
-    WHERE (from_unique_id = $1 OR to_unique_id = $1) AND is_read=false
+    WHERE (from_unique_id = $1 OR to_unique_id = $1) AND is_read=false AND is_delete=false
 `;
 
 export const getFcmToken = `

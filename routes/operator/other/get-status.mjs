@@ -1,7 +1,14 @@
 import express from 'express';
 import {verifyToken} from "../../../modules/auth/token.mjs";
 import {response} from "../../../modules/response.mjs";
-import {callDirection, callState, callStatus, loginType, orderStatus} from "../../../modules/constant/constant.mjs";
+import {
+    callDirection,
+    callState,
+    callStatus, INFO_TYPES,
+    loginType,
+    orderStatus,
+    webPermission
+} from "../../../modules/constant/constant.mjs";
 
 const getStatus = express.Router();
 
@@ -12,7 +19,9 @@ getStatus.get('/',verifyToken,(req,res)=>{
         callState:callState,
         loginType:loginType,
         callStatus:callStatus,
-        orderProductStatus:orderStatus
+        orderProductStatus:orderStatus,
+        permissions:webPermission,
+        inf_types:INFO_TYPES
     }));
     res.end();
 })

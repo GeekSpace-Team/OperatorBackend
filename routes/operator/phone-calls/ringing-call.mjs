@@ -21,16 +21,16 @@ const ringingCallRouter = express.Router();
 
 const callDataChanger = (req, res, next) => {
     let direction;
-    switch (req.body.callType) {
-      case callDirection.INCOMING:
-        direction = callDirection.INCOMING;
+    
+    if (req.body.callType == callDirection.INCOMING) {
         req.body.callTypeStr = "Giriş jaň";
-        break;
-      case callDirection.OUTGOING:
-        direction = callDirection.OUTGOING;
-        req.body.callTypeStr = "Çykyş jaň";
-        break;
+        direction = callDirection.INCOMING;
     }
+    if(req.body.callType == callDirection.OUTGOING){
+      req.body.callTypeStr = "Çykyş jaň";
+      direction = callDirection.OUTGOING;
+    }
+        
     switch (req.body.state) {
       case callState.CALL_STATE_START:
         req.body.callStateStr = "Jaň başlanýar...";
@@ -39,10 +39,10 @@ const callDataChanger = (req, res, next) => {
         req.body.callStateStr = "Jaň edilýär...";
         break;
       case callState.CALL_STATE_OFFHOOK:
-        if (direction == callDirection.INCOMING) {
-          req.body.callStateStr = "Jaň alyndy";
-        } else {
+        if (direction == callDirection.OUTGOING) {
           req.body.callStateStr = "Jaň edilýär...";
+        } else {
+          req.body.callStateStr = "Jaň alyndy";
         }
         break;
       case callState.CALL_STATE_IDLE:

@@ -1,5 +1,45 @@
 import express from 'express';
+import {loginRouter} from "./auth/login.mjs";
+import {getStatistics} from "./statistics/get-statistics.mjs";
+import {getOperatorStatistics} from "./statistics/get-operator-statistics.mjs";
+import {getUserByRoleName} from "./users/get-user-by-role-name.mjs";
+import {addUser} from "./users/add-user.mjs";
+import {updateUser} from "./users/update-user.mjs";
+import {deleteUser} from "./users/delete-user.mjs";
+import {getSellPoint} from "./sell-point/get-sell-points.mjs";
+import {addSellPoint} from "./sell-point/add-sell-point.mjs";
+import {updateSellPoint} from "./sell-point/update-sell-point.mjs";
+import {deleteSellPoint} from "./sell-point/delete-sell-point.mjs";
+import {getInfo} from "./info/get-info.mjs";
+import {addInfo} from "./info/add-info.mjs";
+import {updateInfo} from "./info/update-info.mjs";
+import {deleteInfo} from "./info/delete-info.mjs";
+import {getUserRole} from "./user-role/get-user-role.mjs";
+import {addUserRole} from "./user-role/add-user-role.mjs";
+import {updateUserRole} from "./user-role/update-user-role.mjs";
+import {deleteUserRole} from "./user-role/delete-user-role.mjs";
 
 const adminRouter = express.Router();
+
+adminRouter.use('/auth/',loginRouter);
+adminRouter.use('/get-statistics',getStatistics);
+adminRouter.use('/get-operator-statistics',getOperatorStatistics);
+adminRouter.use('/get-courier-statistics',getOperatorStatistics);
+adminRouter.use('/get-users-by-role-name',getUserByRoleName);
+adminRouter.use('/add-user',addUser);
+adminRouter.use('/update-user',updateUser);
+adminRouter.use('/delete-user',deleteUser);
+adminRouter.use('/get-sell-point',getSellPoint);
+adminRouter.use('/add-sell-point',addSellPoint);
+adminRouter.use('/update-sell-point',updateSellPoint);
+adminRouter.use('/delete-sell-point',deleteSellPoint);
+adminRouter.use('/get-info',getInfo);
+adminRouter.use('/add-info',addInfo);
+adminRouter.use('/update-info',updateInfo);
+adminRouter.use('/delete-info',deleteInfo);
+adminRouter.use('/get-user-role',getUserRole);
+adminRouter.use('/add-user-role',addUserRole);
+adminRouter.use('/update-user-role',updateUserRole);
+adminRouter.use('/delete-user-role',deleteUserRole);
 
 export {adminRouter};

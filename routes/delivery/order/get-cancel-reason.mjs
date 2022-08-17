@@ -11,6 +11,7 @@ const getCancelReasonRouter = express.Router();
 
 getCancelReasonRouter.get('/',verifyToken,(req, res)=>{
     const id = req.query.id;
+    console.log(id);
     db.query(getCancelReasonQuery,[id])
     .then(result=>{
         res.json(response(false,'success',result.rows));
