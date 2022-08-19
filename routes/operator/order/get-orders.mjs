@@ -16,11 +16,13 @@ getOrdersRouter.post('/',verifyToken,(req,res) => {
         let orderByQuery=' ORDER BY c.created_at DESC ';
 
         if(startDate != null && startDate != '' && typeof startDate !== 'undefined'){
-            let endD=new Date("YYYY-MM-DD");
-            if(endDate != null && endDate != '' && typeof endDate !== 'undefined'){
+            let endD=new Date();
+            if(endDate != null && endDate !== '' && typeof endDate !== 'undefined' && endDate != 0){
                 endD=endDate;
+            } else {
+                endD=`${endD.getFullYear()}-${endD.getMonth()+1}-${endD.getDate()}`;
             }
-            whereQuery += ` AND ((c.created_at,c.created_at) OVERLAPS ('${startDate}'::DATE,'${endDate}'::DATE)) `;
+            whereQuery += ` AND ((c.created_at,c.created_at) OVERLAPS ('${startDate}'::DATE,'${endD}'::DATE)) `;
         }
 
         if(typeof sortBy !== 'undefined' && sortBy !=null){
@@ -32,10 +34,10 @@ getOrdersRouter.post('/',verifyToken,(req,res) => {
                     orderByQuery=' ORDER BY c.created_at ASC ';
                     break;
                 case 2:
-                    orderByQuery=' ORDER BY c.fullname ';
+                    orderByQuery=' ORDER BY cus.fullname ';
                     break;
                 case 3:
-                    orderByQuery=' ORDER BY c.fullname DESC';
+                    orderByQuery=' ORDER BY cus.fullname DESC';
                     break;
             }
         }
@@ -66,6 +68,7 @@ getOrdersRouter.post('/',verifyToken,(req,res) => {
             }
         })
         .catch(err=>{
+            console.log(err);
             badRequest(req,res);
         })
 

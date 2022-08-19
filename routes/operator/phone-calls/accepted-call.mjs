@@ -15,16 +15,18 @@ acceptedCallRouter.post('/',verifyToken,(req,res) => {
         let whereQuery='';
         let orderByQuery=' ORDER BY p.created_at DESC ';
 
-        if(startDate != null && startDate != '' && typeof startDate !== 'undefined'){
-            let endD=new Date("YYYY-MM-DD");
-            if(endDate != null && endDate != '' && typeof endDate !== 'undefined'){
+        if(startDate != null && startDate !== '' && typeof startDate !== 'undefined'){
+            let endD=new Date();
+            if(endDate != null && endDate !== '' && typeof endDate !== 'undefined' && endDate != 0){
                 endD=endDate;
+            } else {
+                endD=`${endD.getFullYear()}-${endD.getMonth()+1}-${endD.getDate()}`;
             }
-            whereQuery += ` AND ((p.call_date,p.call_date) OVERLAPS ('${startDate}'::DATE,'${endDate}'::DATE)) `;
+            whereQuery += ` AND ((p.call_date,p.call_date) OVERLAPS ('${startDate}'::DATE,'${endD}'::DATE)) `;
         }
 
         if(incoming){
-            whereQuery += ` AND (call_direction = '${callDirection.INCOMING}') `;
+            whereQuery += ` AND (call_direction = '${callDirection.INCOMING}' ${outgoing?` OR call_direction = '${callDirection.OUTGOING}'`:``}) `;
         } else if(outgoing){
             whereQuery += ` AND (call_direction = '${callDirection.OUTGOING}') `;
         }
