@@ -12,7 +12,10 @@ getCouriersRouter.get('/',verifyToken,(req,res) => {
     } else {
         db.query(getSellPointId,[req.user.user.unique_id])
         .then(result=>{
-            let sell_point_id = result.rows[0].sell_point_id;
+            let sell_point_id = 0;
+            try{
+                sell_point_id=result.rows[0].sell_point_id;
+            } catch (err){}
             db.query(getCouriers,[sell_point_id])
             .then(result2=>{
                 res.json(response(false,'success',result2.rows));
@@ -23,6 +26,7 @@ getCouriersRouter.get('/',verifyToken,(req,res) => {
             })
         })
         .catch(err=>{
+            console.log(err);
             badRequest(req,res);
         })
     }

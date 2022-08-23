@@ -33,6 +33,7 @@ import {markAsReadRouter} from "./inbox/mark-as-read.mjs";
 import {getInboxRouter} from "./inbox/get-inbox.mjs";
 import {getUnreadInboxCount} from "./inbox/get-unread-count.mjs";
 import {getAllCustomerRouter} from "./customer/get-all-customer.mjs";
+import {getOrderProductHistory} from "./order/get-order-product-history.mjs";
 
 const operatorRouter = express.Router();
 
@@ -71,6 +72,7 @@ operatorRouter.use('/change-order-product',changeOrderProductRouter);
 operatorRouter.use('/change-order-product-status',editOrderProductStatus);
 operatorRouter.use('/get-orders',getOrdersRouter);
 operatorRouter.use('/get-order-product-status',getOrderProductStatusRouter);
+operatorRouter.use('/get-order-product-history',getOrderProductHistory);
 operatorRouter.use('/get-couriers',getCouriersRouter);
 operatorRouter.use('/add-courier',addCourierRouter);
 operatorRouter.use('/get-couriers-full',getCouriersBySellIdRouter);

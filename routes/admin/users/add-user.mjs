@@ -24,6 +24,8 @@ addUser.post('/', verifyToken,async (req, res) => {
             user_number
         } = req.body;
 
+        
+
         db.query(addUserQuery,[
             fullname,
             username,

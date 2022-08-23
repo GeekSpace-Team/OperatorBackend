@@ -18,13 +18,14 @@ import {getUserRole} from "./user-role/get-user-role.mjs";
 import {addUserRole} from "./user-role/add-user-role.mjs";
 import {updateUserRole} from "./user-role/update-user-role.mjs";
 import {deleteUserRole} from "./user-role/delete-user-role.mjs";
+import { getCourierStatistics } from './statistics/get-courier-statistics.mjs';
 
 const adminRouter = express.Router();
 
 adminRouter.use('/auth/',loginRouter);
 adminRouter.use('/get-statistics',getStatistics);
 adminRouter.use('/get-operator-statistics',getOperatorStatistics);
-adminRouter.use('/get-courier-statistics',getOperatorStatistics);
+adminRouter.use('/get-courier-statistics',getCourierStatistics);
 adminRouter.use('/get-users-by-role-name',getUserByRoleName);
 adminRouter.use('/add-user',addUser);
 adminRouter.use('/update-user',updateUser);

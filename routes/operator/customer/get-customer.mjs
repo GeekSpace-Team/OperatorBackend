@@ -17,11 +17,18 @@ getCustomerRouter.post('/',verifyToken,(req, res) => {
         let orderByQuery=' ORDER BY c.created_at DESC ';
 
         if(startDate != null && startDate != '' && typeof startDate !== 'undefined'){
-            let endD=new Date("YYYY-MM-DD");
-            if(endDate != null && endDate != '' && typeof endDate !== 'undefined'){
+            let endD=new Date();
+            if(endDate != null && endDate !== '' && typeof endDate !== 'undefined' && endDate != 0){
                 endD=endDate;
+            } else {
+                endD=`${endD.getFullYear()}-${endD.getMonth()+1}-${endD.getDate()}`;
             }
-            whereQuery += ` AND ((c.created_at,c.created_at) OVERLAPS ('${startDate}'::DATE,'${endDate}'::DATE)) `;
+            if(whereQuery!=''){
+                whereQuery+=" AND ";
+            } else {
+                whereQuery+=" WHERE ";
+            }
+            whereQuery += ` ((c.created_at,c.created_at) OVERLAPS ('${startDate}'::DATE,'${endD}'::DATE)) `;
         }
 
         if(typeof sortBy !== 'undefined' && sortBy !=null){
@@ -42,11 +49,18 @@ getCustomerRouter.post('/',verifyToken,(req, res) => {
         }
 
         if(typeof status !== 'undefined' && status != null && status > 0){
-            whereQuery += ` AND (c.status = ${status}) `;
+            if(whereQuery!=''){
+                whereQuery+=" AND ";
+            } else {
+                whereQuery+=" WHERE ";
+            }
+            whereQuery += ` (c.status = ${status}) `;
         }
 
 
         let query = format(getCustomers,whereQuery,orderByQuery);
+
+        console.log(query);
 
         db.query(query,[perPage,page])
         .then(result=>{

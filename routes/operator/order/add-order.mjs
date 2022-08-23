@@ -79,7 +79,6 @@ addOrderRouter.post('/', verifyToken, async (req, res) => {
             });
             await db.query(format(addOrderProduct, values))
                 .then(result => {
-                    console.log('Products', result);
                     if (result.rows.length) {
 
                         insertedProducts = result.rows;
@@ -122,6 +121,8 @@ addOrderRouter.post('/', verifyToken, async (req, res) => {
                 .catch(err => { });
         }
 
+        console.log(courier_unique_id);
+
         if (typeof courier_unique_id !== 'undefined' && courier_unique_id != null && courier_unique_id !== '') {
             db.query(addOrderCourier, [
                 insertedOrderUniqueId,
@@ -130,14 +131,20 @@ addOrderRouter.post('/', verifyToken, async (req, res) => {
                 ''
             ])
                 .then(result => { })
-                .catch(err => { });
+                .catch(err => { 
+                    console.log(err);
+                });
         }
 
 
         if (typeof latitude !== 'undefined' && latitude != null && latitude !== ''
             && typeof longitude !== 'undefined' && longitude != null && longitude !== '') {
             await db.query(addOrderLocationHistory, [
-
+                insertedOrderUniqueId,
+                operatorUniqueId,
+                latitude,
+                longitude,
+                ''
             ])
                 .then(result => { })
                 .catch(err => { });

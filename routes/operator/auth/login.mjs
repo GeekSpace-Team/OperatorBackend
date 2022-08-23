@@ -40,6 +40,7 @@ loginRouter.post('/sign-in',async(req,res)=>{
                         }
                     })
                     .catch(err=>{
+                        console.log(err);
                         badRequest(req,res);
                     })
                 })

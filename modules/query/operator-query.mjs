@@ -70,7 +70,7 @@ export const updateByLastCallState = `
 
 
 export const getMissedCall = `
-SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,c.address_home,c.address_work,cs.value AS user_status,
+SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,c.address_home,c.address_work,cs.value AS user_status,c.unique_id as customer_unique_id,
 (SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number) AS all_call_history_count,
 (SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number) AS call_history
 FROM phone_call p 
@@ -94,7 +94,7 @@ WHERE (p.call_state='${callStatus.REJECTED}' OR p.call_state='${callStatus.ACCEP
 `;
 
 export const getAcceptedCall = `
-SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,c.address_home,c.address_work,cs.value AS user_status,
+SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,c.address_home,c.address_work,cs.value AS user_status,c.unique_id as customer_unique_id,
 (SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number) AS all_call_history_count,
 (SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number) AS call_history
 FROM phone_call p 
@@ -219,7 +219,7 @@ INSERT INTO customer_order_product(
 	updated_at, 
 	reason, 
 	operator_unique_id)
-	VALUES %L RETURNING *;
+	VALUES %L
 `;
 
 export const addOrderAddress = `
@@ -318,33 +318,66 @@ INSERT INTO customer_order_product_status_history(
 `;
 
 export const getOrders = `
-SELECT c.id,c.unique_id, 
-c.is_express, 
-c.created_at, 
-c.updated_at, 
-c.additional_information,
-c.customer_unique_id, 
-c.operator_unique_id,
-cus.fullname,
-cus.phone_number,
-cus.address_home,
-cus.address_work,
-cor.fullname AS courier_fullname,
-cor.phone_number AS courier_phone_number,
-(SELECT array_to_json(array_agg(addr.*)) FROM customer_order_address_history addr WHERE addr.customer_order_unique_id=c.unique_id) AS address_history,
-(SELECT array_to_json(array_agg(courier.*)) FROM customer_order_courier_history courier WHERE courier.customer_order_unique_id=c.unique_id) AS courier_history,
-(SELECT array_to_json(array_agg(d.*)) FROM customer_order_date_history d WHERE d.customer_order_unique_id=c.unique_id) AS date_history,
-(SELECT array_to_json(array_agg(price.*)) FROM customer_order_delivery_price price WHERE price.customer_order_unique_id=c.unique_id) AS delivery_price_history,
-(SELECT array_to_json(array_agg(loc.*)) FROM customer_order_location_history loc WHERE loc.customer_order_unique_id=c.unique_id) AS location_history,
-(SELECT array_to_json(array_agg(st.*)) FROM customer_order_status_history st WHERE st.customer_order_unique_id=c.unique_id) AS status_history,
-(SELECT array_to_json(array_agg(p.*)) FROM customer_order_product p WHERE p.customer_order_unique_id=c.unique_id) AS products
+SELECT c.id,c.unique_id,
+    c.is_express,
+    c.created_at,
+    c.updated_at,
+    c.additional_information,
+    c.customer_unique_id,
+    c.operator_unique_id,
+    cus.fullname,
+    cus.phone_number,
+    cus.address_home,
+    cus.address_work,
+    cor.fullname AS courier_fullname,
+    cor.phone_number AS courier_phone_number,
+    uss.fullname AS operator_fullname,
+    (SELECT array_to_json(array_agg(json_build_object('res',addr.*,'operator',uu.fullname,'courier',cc.fullname))) FROM customer_order_address_history addr
+LEFT JOIN users uu ON uu.unique_id=addr.user_unique_id
+LEFT JOIN courier cc ON cc.unique_id=addr.user_unique_id
+WHERE addr.customer_order_unique_id=c.unique_id) AS address_history,
+
+    (SELECT array_to_json(array_agg(json_build_object('res',courier.*,'operator',uu.fullname,'courier',cc.fullname))) FROM customer_order_courier_history courier
+LEFT JOIN users uu ON uu.unique_id=courier.operator_unique_id
+LEFT JOIN courier cc ON cc.unique_id=courier.courier_unique_id
+WHERE courier.customer_order_unique_id=c.unique_id) AS courier_history,
+
+
+    (SELECT array_to_json(array_agg(json_build_object('res',d.*,'operator',uu.fullname,'courier',cc.fullname))) FROM customer_order_date_history d
+LEFT JOIN users uu ON uu.unique_id=d.user_unique_id
+LEFT JOIN courier cc ON cc.unique_id=d.user_unique_id
+WHERE d.customer_order_unique_id=c.unique_id) AS date_history,
+
+    (SELECT array_to_json(array_agg(json_build_object('res',price.*,'operator',uu.fullname,'courier',cc.fullname))) FROM customer_order_delivery_price price
+LEFT JOIN users uu ON uu.unique_id=price.user_unique_id
+LEFT JOIN courier cc ON cc.unique_id=price.user_unique_id
+WHERE price.customer_order_unique_id=c.unique_id) AS delivery_price_history,
+
+
+    (SELECT array_to_json(array_agg(json_build_object('res',loc.*,'operator',uu.fullname,'courier',cc.fullname))) FROM customer_order_location_history loc
+LEFT JOIN users uu ON uu.unique_id=loc.user_unique_id
+LEFT JOIN courier cc ON cc.unique_id=loc.user_unique_id
+WHERE loc.customer_order_unique_id=c.unique_id) AS location_history,
+
+
+
+    (SELECT array_to_json(array_agg(json_build_object('res',st.*,'operator',uu.fullname,'courier',cc.fullname))) FROM customer_order_status_history st
+LEFT JOIN users uu ON uu.unique_id=st.user_unique_id
+LEFT JOIN courier cc ON cc.unique_id=st.user_unique_id
+WHERE st.customer_order_unique_id=c.unique_id) AS status_history,
+
+    (SELECT array_to_json(array_agg(p.*)) FROM customer_order_product p WHERE p.customer_order_unique_id=c.unique_id) AS products
 FROM customer_order c
 LEFT JOIN customer cus ON cus.unique_id=c.customer_unique_id
+LEFT JOIN users uss ON uss.unique_id=c.operator_unique_id
 LEFT JOIN courier cor ON cor.unique_id=(SELECT courier.courier_unique_id FROM customer_order_courier_history courier WHERE courier.customer_order_unique_id=c.unique_id ORDER BY updated_at DESC LIMIT 1)
+
 %s
 %s
 LIMIT $2 OFFSET ($3 - 1) * $2;
 `;
+
+
 
 export const getOrdersCount = `
 SELECT c.id,c.unique_id, 
@@ -463,6 +496,13 @@ export const getCourierUniqueId = `
 export const getAllCustomer=`
 SELECT id, fullname, phone_number, question_mode, find_us, address_home, address_work, information, created_at, updated_at, unique_id, operator_unique_id, speak_mode, status, speak_tone, speak_accent, focus_word
     FROM public.customer;
+`;
+
+
+export const updateOrderInfo=`
+UPDATE public.customer_order
+    SET is_express=$1, updated_at='now()', additional_information=$2, customer_unique_id=$3
+    WHERE unique_id=$4;
 `;
 
 
