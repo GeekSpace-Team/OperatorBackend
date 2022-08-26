@@ -29,8 +29,8 @@ const specs = swaggerJsdoc(options);
 const app = express();
 app.use(cors());
 app.use('/public', express.static('public'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({limit: '500mb', extended: true}));
+app.use(express.urlencoded({limit: "500mb", extended: true, parameterLimit:500000}));
 app.use('/api', router);
 app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(specs));
 
