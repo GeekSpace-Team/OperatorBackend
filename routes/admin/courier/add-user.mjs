@@ -2,12 +2,12 @@ import express from 'express';
 import {badRequest, response} from "../../../modules/response.mjs";
 import {verifyToken} from "../../../modules/auth/token.mjs";
 import {db} from "../../../modules/database/connection.mjs";
-import {addUserQuery} from "../../../modules/query/admin-query.mjs";
+import {addCourierQuery} from "../../../modules/query/admin-query.mjs";
 import {generateUUID} from "../../../modules/uuid/uuid.mjs";
 
-const addUser = express.Router();
+const addCourier = express.Router();
 
-addUser.post('/', verifyToken,async (req, res) => {
+addCourier.post('/', verifyToken,async (req, res) => {
     if (typeof req.body === 'undefined' || req.body == null) {
         badRequest(req, res);
     } else {
@@ -20,11 +20,12 @@ addUser.post('/', verifyToken,async (req, res) => {
             user_role,
             sell_point_id,
             work_start_date,
-            date_of_birthday,
-            user_number
+            date_of_birthday
         } = req.body;
 
-        db.query(addUserQuery,[
+        
+
+        db.query(addCourierQuery,[
             fullname,
             username,
             password,
@@ -34,7 +35,7 @@ addUser.post('/', verifyToken,async (req, res) => {
             sell_point_id,
             '',
             work_start_date,
-            date_of_birthday, generateUUID(), user_number
+            date_of_birthday, generateUUID()
         ])
             .then(result=>{
                 if(result.rows.length){
@@ -51,4 +52,4 @@ addUser.post('/', verifyToken,async (req, res) => {
     }
 })
 
-export {addUser};
+export {addCourier};

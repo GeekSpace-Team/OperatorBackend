@@ -12,7 +12,7 @@ getCustomerRouter.post('/',verifyToken,(req, res) => {
     if(typeof req.user === 'undefined' || req.user === null){
         badRequest(req,res);
     } else {
-        const {startDate,endDate,status,sortBy,perPage,page}=req.body;
+        const {startDate,endDate,status,sortBy,perPage,page,search}=req.body;
         let whereQuery='';
         let orderByQuery=' ORDER BY c.created_at DESC ';
 
@@ -56,6 +56,18 @@ getCustomerRouter.post('/',verifyToken,(req, res) => {
             }
             whereQuery += ` (c.status = ${status}) `;
         }
+
+
+        if(typeof search !== 'undefined' && search != null && search != ''){
+            if(whereQuery!=''){
+                whereQuery+=" AND ";
+            } else {
+                whereQuery+=" WHERE ";
+            }
+            whereQuery += ` (c.fullname ILIKE '%${search}%' OR c.phone_number ILIKE '%${search}%' OR c.address_home ILIKE '%${search}%' OR c.address_work ILIKE '%${search}%' OR c.information ILIKE '%${search}%') `;
+        }
+
+
 
 
         let query = format(getCustomers,whereQuery,orderByQuery);

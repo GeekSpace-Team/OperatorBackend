@@ -2,10 +2,7 @@ import express from 'express';
 import {loginRouter} from "./auth/login.mjs";
 import {getStatistics} from "./statistics/get-statistics.mjs";
 import {getOperatorStatistics} from "./statistics/get-operator-statistics.mjs";
-import {getUserByRoleName} from "./users/get-user-by-role-name.mjs";
-import {addUser} from "./users/add-user.mjs";
-import {updateUser} from "./users/update-user.mjs";
-import {deleteUser} from "./users/delete-user.mjs";
+import {addCourier} from "./courier/add-user.mjs";
 import {getSellPoint} from "./sell-point/get-sell-points.mjs";
 import {addSellPoint} from "./sell-point/add-sell-point.mjs";
 import {updateSellPoint} from "./sell-point/update-sell-point.mjs";
@@ -19,6 +16,13 @@ import {addUserRole} from "./user-role/add-user-role.mjs";
 import {updateUserRole} from "./user-role/update-user-role.mjs";
 import {deleteUserRole} from "./user-role/delete-user-role.mjs";
 import { getCourierStatistics } from './statistics/get-courier-statistics.mjs';
+import {addUser} from "./users/add-user.mjs";
+import {getUserByRoleName} from "./users/get-user-by-role-name.mjs";
+import {updateUser} from "./users/update-user.mjs";
+import {deleteUser} from "./users/delete-user.mjs";
+import {updateCourier} from "./courier/update-user.mjs";
+import {deleteCourier} from "./courier/delete-user.mjs";
+import {getCourierRouter} from "./courier/get-user-by-role-name.mjs";
 
 const adminRouter = express.Router();
 
@@ -42,5 +46,9 @@ adminRouter.use('/get-user-role',getUserRole);
 adminRouter.use('/add-user-role',addUserRole);
 adminRouter.use('/update-user-role',updateUserRole);
 adminRouter.use('/delete-user-role',deleteUserRole);
+adminRouter.use('/add-courier',addCourier);
+adminRouter.use('/update-courier',updateCourier);
+adminRouter.use('/delete-courier',deleteCourier);
+adminRouter.use('/get-courier',getCourierRouter);
 
 export {adminRouter};

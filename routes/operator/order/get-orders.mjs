@@ -11,7 +11,7 @@ getOrdersRouter.post('/',verifyToken,(req,res) => {
     if(typeof req.user === 'undefined' || req.user === null){
         badRequest(req,res);
     } else {
-        const {startDate,endDate,sortBy,perPage,page}=req.body;
+        const {startDate,endDate,sortBy,perPage,page,search}=req.body;
         let whereQuery=' WHERE c.operator_unique_id = $1 ';
         let orderByQuery=' ORDER BY c.created_at DESC ';
 
@@ -40,6 +40,15 @@ getOrdersRouter.post('/',verifyToken,(req,res) => {
                     orderByQuery=' ORDER BY cus.fullname DESC';
                     break;
             }
+        }
+
+        if(typeof search !== 'undefined' && search != null && search != ''){
+            if(whereQuery!=''){
+                whereQuery+=" AND ";
+            } else {
+                whereQuery+=" WHERE ";
+            }
+            whereQuery += ` (c.additional_information ILIKE '%${search}%' OR cus.fullname ILIKE '%${search}%' OR cus.phone_number ILIKE '%${search}%' OR cus.address_home ILIKE '%${search}%' OR cus.address_work ILIKE '%${search}%' OR cus.information ILIKE '%${search}%') `;
         }
 
         let query = format(getOrders,whereQuery,orderByQuery);

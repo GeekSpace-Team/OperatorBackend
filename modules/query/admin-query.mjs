@@ -191,3 +191,33 @@ DELETE FROM role_permission WHERE user_role=$1;
 export const deleteUserRoleQ=`
 DELETE FROM user_role WHERE id=$1;
 `;
+
+
+export const getCouriersQuery=`
+SELECT u.*,r.name as role_name,
+(SELECT array_to_json(array_agg(p.*)) FROM role_permission p WHERE p.user_role=u.user_role) as user_permissions,
+(SELECT array_to_json(array_agg(lh.*)) FROM login_history lh WHERE lh.user_unique_id=u.unique_id) as login_history
+FROM courier u 
+LEFT JOIN user_role r ON r.id=u.user_role
+LEFT JOIN sell_point s ON s.id=u.sell_point_id
+ORDER BY u.created_at DESC
+`;
+
+
+export const addCourierQuery = `
+INSERT INTO courier(
+    fullname, username, password, phone_number, status, user_role, sell_point_id, token, created_at, updated_at, work_start_date, date_of_birthday, unique_id)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'now()', 'now()', $9, $10, $11) RETURNING *;
+`;
+
+export const updateCourierQuery=`
+UPDATE courier
+SET fullname=$1, username=$2, password=$3, phone_number=$4, 
+status=$5, user_role=$6, sell_point_id=$7,  updated_at='now()', 
+work_start_date=$8, date_of_birthday=$9
+    WHERE unique_id=$10 RETURNING *;
+`;
+
+export const deleteCourierQuery=`
+DELETE FROM public.courier WHERE unique_id=$1;
+`;
