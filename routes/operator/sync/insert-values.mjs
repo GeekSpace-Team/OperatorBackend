@@ -141,41 +141,41 @@ const getValues=async(type,values)=>{
     if(type===tables.customer_order_address_history){
         await values.forEach((e,i)=>{
             const{
-                customer_order_unique_id, address, user_unique_id, created_at, updated_at, reason
+                customer_order_unique_id, address, user_unique_id, created_at, updated_at, reason,unique_id
             } = e;
-            result.push([customer_order_unique_id, address, user_unique_id, created_at, updated_at, reason]);
+            result.push([customer_order_unique_id, address, user_unique_id, created_at, updated_at, reason,unique_id]);
         })
     }
     if(type===tables.customer_order_courier_history){
         await values.forEach((e,i)=>{
             const{
-                customer_order_unique_id, courier_unique_id, operator_unique_id, created_at, updated_at, reason
+                customer_order_unique_id, courier_unique_id, operator_unique_id, created_at, updated_at, reason,unique_id
             } = e;
-            result.push([customer_order_unique_id, courier_unique_id, operator_unique_id, created_at, updated_at, reason]);
+            result.push([customer_order_unique_id, courier_unique_id, operator_unique_id, created_at, updated_at, reason,unique_id]);
         })
     }
     if(type===tables.customer_order_date_history){
         await values.forEach((e,i)=>{
             const{
-                customer_order_unique_id, order_date, order_time, user_unique_id, created_at, updated_at, reason
+                customer_order_unique_id, order_date, order_time, user_unique_id, created_at, updated_at, reason,unique_id
             } = e;
-            result.push([customer_order_unique_id, order_date, order_time, user_unique_id, created_at, updated_at, reason]);
+            result.push([customer_order_unique_id, order_date, order_time, user_unique_id, created_at, updated_at, reason,unique_id]);
         })
     }
     if(type===tables.customer_order_delivery_price){
         await values.forEach((e,i)=>{
             const {
-                customer_order_unique_id, user_unique_id, delivery_price, reason, created_at, updated_at
+                customer_order_unique_id, user_unique_id, delivery_price, reason, created_at, updated_at,unique_id
             } = e;
-            result.push([customer_order_unique_id, user_unique_id, delivery_price, reason, created_at, updated_at]);
+            result.push([customer_order_unique_id, user_unique_id, delivery_price, reason, created_at, updated_at,unique_id]);
         })
     }
     if(type===tables.customer_order_location_history){
         await values.forEach((e,i)=>{
             const{
-                customer_order_unique_id, user_unique_id, latitude, longitude, reason, created_at, updated_at
+                customer_order_unique_id, user_unique_id, latitude, longitude, reason, created_at, updated_at,unique_id
             } = e;
-            result.push([customer_order_unique_id, user_unique_id, latitude, longitude, reason, created_at, updated_at]);
+            result.push([customer_order_unique_id, user_unique_id, latitude, longitude, reason, created_at, updated_at,unique_id]);
         })
     }
     if(type===tables.customer_order_product){
@@ -189,17 +189,17 @@ const getValues=async(type,values)=>{
     if(type===tables.customer_order_product_status_history){
         await values.forEach((e,i)=>{
             const{
-                customer_order_product_unique_id, status, user_unique_id, created_at, updated_at, reason
+                customer_order_product_unique_id, status, user_unique_id, created_at, updated_at, reason,unique_id
             } = e;
-            result.push([customer_order_product_unique_id, status, user_unique_id, created_at, updated_at, reason]);
+            result.push([customer_order_product_unique_id, status, user_unique_id, created_at, updated_at, reason,unique_id]);
         })
     }
     if(type===tables.customer_order_status_history){
         await values.forEach((e,i)=>{
             const{
-                customer_order_unique_id, status, reason, user_unique_id, created_at, updated_at
+                customer_order_unique_id, status, reason, user_unique_id, created_at, updated_at,unique_id
             } = e;
-            result.push([ customer_order_unique_id, status, reason, user_unique_id, created_at, updated_at]);
+            result.push([ customer_order_unique_id, status, reason, user_unique_id, created_at, updated_at,unique_id]);
         })
     }
     if(type===tables.customer_status){
@@ -279,6 +279,7 @@ const getValues=async(type,values)=>{
 
 insertValues.post('/', async (req, res) => {
     if (typeof req.body === 'undefined' || req.body == null) {
+        console.log('ok')
         badRequest(req, res);
     } else {
         const {
@@ -292,6 +293,7 @@ insertValues.post('/', async (req, res) => {
                 res.end();
             })
             .catch(err=>{
+                console.log(err);
                 badRequest(req,res);
             })
 
