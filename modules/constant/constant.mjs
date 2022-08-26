@@ -64,6 +64,7 @@ export const tables={
     customer_interested_product:"customer_interested_product",
     user_role:"user_role",
     speak_tone:"speak_tone",
+    speak_mode:"speak_mode",
     speak_accent:"speak_accent",
     sell_point:"sell_point",
     role_permission:"role_permission",

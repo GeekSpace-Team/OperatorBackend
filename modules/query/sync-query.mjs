@@ -121,6 +121,11 @@ INSERT INTO public.speak_tone(
     value, status, created_at, updated_at)
     VALUES %L RETURNING *;
 `;
+export const insertSpeakMode=`
+INSERT INTO public.speak_mode(
+    value, created_at, updated_at, status)
+    VALUES %L RETURNING *;
+`;
 
 export const insertSpeakAccent=`
     INSERT INTO public.speak_accent(
@@ -178,27 +183,27 @@ export const insertCustomerOrder=`
 
 export const insertCustomerOrderAddress=`
     INSERT INTO public.customer_order_address_history(
-        customer_order_unique_id, address, user_unique_id, created_at, updated_at, reason)
+        customer_order_unique_id, address, user_unique_id, created_at, updated_at, reason,unique_id)
         VALUES %L RETURNING *;
 `;
 export const insertCustomerOrderCourier=`
     INSERT INTO public.customer_order_courier_history(
-        customer_order_unique_id, courier_unique_id, operator_unique_id, created_at, updated_at, reason)
+        customer_order_unique_id, courier_unique_id, operator_unique_id, created_at, updated_at, reason,unique_id)
         VALUES %L RETURNING *;
 `;
 export const insertCustomerOrderDate=`
     INSERT INTO public.customer_order_date_history(
-        customer_order_unique_id, order_date, order_time, user_unique_id, created_at, updated_at, reason)
+        customer_order_unique_id, order_date, order_time, user_unique_id, created_at, updated_at, reason,unique_id)
         VALUES %L RETURNING *;
 `;
 export const insertCustomerOrderDeliveryPrice=`
     INSERT INTO public.customer_order_delivery_price(
-        customer_order_unique_id, user_unique_id, delivery_price, reason, created_at, updated_at)
+        customer_order_unique_id, user_unique_id, delivery_price, reason, created_at, updated_at,unique_id)
         VALUES %L RETURNING *;
 `;
 export const insertCustomerOrderLocationHistory=`
     INSERT INTO public.customer_order_location_history(
-        customer_order_unique_id, user_unique_id, latitude, longitude, reason, created_at, updated_at)
+        customer_order_unique_id, user_unique_id, latitude, longitude, reason, created_at, updated_at,unique_id)
         VALUES %L RETURNING *;
 `;
 export const insertCustomerOrderProduct=`
@@ -208,12 +213,12 @@ export const insertCustomerOrderProduct=`
 `;
 export const insertCustomerOrderProductStatus=`
     INSERT INTO public.customer_order_product_status_history(
-        customer_order_product_unique_id, status, user_unique_id, created_at, updated_at, reason)
+        customer_order_product_unique_id, status, user_unique_id, created_at, updated_at, reason,unique_id)
         VALUES %L RETURNING *;
 `;
 export const insertCustomerOrderStatus=`
     INSERT INTO public.customer_order_status_history(
-        customer_order_unique_id, status, reason, user_unique_id, created_at, updated_at)
+        customer_order_unique_id, status, reason, user_unique_id, created_at, updated_at,unique_id)
         VALUES %L RETURNING *;
 `;
 

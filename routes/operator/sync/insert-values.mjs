@@ -19,7 +19,7 @@ import {
     insertFocusWord, insertInbox,
     insertRolePermission,
     insertSellPoint,
-    insertSpeakAccent,
+    insertSpeakAccent, insertSpeakMode,
     insertSpeakTone, insertUserRole, insertUsers
 } from "../../../modules/query/sync-query.mjs";
 import {db} from "../../../modules/database/connection.mjs";
@@ -84,6 +84,9 @@ const getQuery=(type)=>{
     }
     if(type===tables.speak_tone){
         return insertSpeakTone;
+    }
+    if(type===tables.speak_mode){
+        return insertSpeakMode;
     }
     if(type===tables.user_role){
         return insertUserRole;
@@ -250,6 +253,14 @@ const getValues=async(type,values)=>{
             result.push([value, status, created_at, updated_at]);
         })
     }
+    if(type===tables.speak_mode){
+        await values.forEach((e,i)=>{
+            const{
+                value, created_at, updated_at, status
+            } = e;
+            result.push([value, created_at, updated_at, status]);
+        })
+    }
     if(type===tables.user_role){
         await values.forEach((e,i)=>{
             const{
@@ -278,14 +289,14 @@ const getValues=async(type,values)=>{
 }
 
 insertValues.post('/', async (req, res) => {
-    if (typeof req.body === 'undefined' || req.body == null) {
-        console.log('ok')
-        badRequest(req, res);
-    } else {
         const {
             values,
             type
         } = req.body;
+        if(values == null || values.length<=0 && values===''){
+            res.json(response(false,'success','success'));
+            return;
+        }
         let v = await getValues(type,values);
         db.query(format(getQuery(type),v))
             .then(result=>{
@@ -296,8 +307,6 @@ insertValues.post('/', async (req, res) => {
                 console.log(err);
                 badRequest(req,res);
             })
-
-    }
 })
 
 export {insertValues};
