@@ -38,10 +38,12 @@ getAllCustomer.get('/', verifyToken,async (req, res) => {
                 speak_mode:results[4].rows,
                 sell_point:results[5].rows,
                 role_permission:results[6].rows,
-                customer_status:results[7].rows,
-                cancel_reason:results[8].rows,
-                courier:results[9].rows,
-                users:results[10].rows
+                inbox:results[7].rows,
+                focus_word:results[8].rows,
+                customer_status:results[9].rows,
+                cancel_reason:results[10].rows,
+                courier:results[11].rows,
+                users:results[12].rows
             }));
             res.end();
         })

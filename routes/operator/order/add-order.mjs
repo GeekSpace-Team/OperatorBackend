@@ -80,21 +80,22 @@ addOrderRouter.post('/', verifyToken, async (req, res) => {
             await db.query(format(addOrderProduct, values))
                 .then(result => {
                     if (result.rows.length) {
-
                         insertedProducts = result.rows;
                     } else { }
                 })
                 .catch(err => {
-                    console.log(err);
+                    console.log(`1: ${err}`);
                 });
         }
 
 
         if (typeof address !== 'undefined' && address != null && address !== '') {
-            await db.query(addOrderAddress, [insertedOrderUniqueId, address, operatorUniqueId, ''])
+            await db.query(addOrderAddress, [insertedOrderUniqueId, address, operatorUniqueId, '',generateUUID()])
                 .then(result => {
                 })
-                .catch(err => { });
+                .catch(err => {
+                    console.log(`2: ${err}`);
+                });
         }
 
         if (typeof order_date !== 'undefined' && order_date != null && order_date !== ''
@@ -104,10 +105,13 @@ addOrderRouter.post('/', verifyToken, async (req, res) => {
                 order_date,
                 order_time,
                 operatorUniqueId,
-                ''
+                '',
+                generateUUID()
             ])
                 .then(result => { })
-                .catch(err => { });
+                .catch(err => {
+                    console.log(`3: ${err}`);
+                });
         }
 
         if (typeof delivery_price !== 'undefined' && delivery_price != null && delivery_price !== '') {
@@ -115,10 +119,13 @@ addOrderRouter.post('/', verifyToken, async (req, res) => {
                 insertedOrderUniqueId,
                 operatorUniqueId,
                 delivery_price,
-                ''
+                '',
+                generateUUID()
             ])
                 .then(result => { })
-                .catch(err => { });
+                .catch(err => {
+                    console.log(`4: ${err}`);
+                });
         }
 
         console.log(courier_unique_id);
@@ -128,11 +135,12 @@ addOrderRouter.post('/', verifyToken, async (req, res) => {
                 insertedOrderUniqueId,
                 courier_unique_id,
                 operatorUniqueId,
-                ''
+                '',
+                generateUUID()
             ])
                 .then(result => { })
-                .catch(err => { 
-                    console.log(err);
+                .catch(err => {
+                    console.log(`5: ${err}`);
                 });
         }
 
@@ -144,10 +152,13 @@ addOrderRouter.post('/', verifyToken, async (req, res) => {
                 operatorUniqueId,
                 latitude,
                 longitude,
-                ''
+                '',
+                generateUUID()
             ])
                 .then(result => { })
-                .catch(err => { });
+                .catch(err => {
+                    console.log(`6: ${err}`);
+                });
         }
 
         if (typeof status !== 'undefined' && status != null && status !== '') {
@@ -155,10 +166,13 @@ addOrderRouter.post('/', verifyToken, async (req, res) => {
                 insertedOrderUniqueId,
                 status,
                 '',
-                operatorUniqueId
+                operatorUniqueId,
+                generateUUID()
             ])
                 .then(result => { })
-                .catch(err => { });
+                .catch(err => {
+                    console.log(`7: ${err}`);
+                });
         }
 
         if (typeof insertedProducts !== 'undefined' && insertedProducts != null) {
@@ -170,17 +184,20 @@ addOrderRouter.post('/', verifyToken, async (req, res) => {
                     operatorUniqueId,
                     'now()',
                     'now()',
-                    ''
+                    '',
+                    generateUUID()
                 ]
                 );
             });
             let query = format(addOrderProductStatus, productValues);
+
             await db.query(query)
                 .then(result => {
                     res.json(response(false, 'success', 'success'));
                     res.end();
                 })
                 .catch(err => {
+                    console.log(`8: ${err}`);
                     badRequest(req, res);
                 });
         } else {

@@ -72,6 +72,7 @@ export const tables={
     cancel_reason:"cancel_reason",
     courier:"courier",
     users:"users",
+    inbox:"inbox",
     customer_order:"customer_order",
     customer_order_address_history:"customer_order_address_history",
     customer_order_courier_history:"customer_order_courier_history",

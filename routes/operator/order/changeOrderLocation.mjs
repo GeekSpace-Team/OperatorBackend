@@ -4,6 +4,7 @@ import {badRequest, response} from "../../../modules/response.mjs";
 import {db} from "../../../modules/database/connection.mjs";
 import {changeOrderLocation, getCourierUniqueId} from "../../../modules/query/operator-query.mjs";
 import {sendMessage} from "../../../modules/push/push.mjs";
+import {generateUUID} from "../../../modules/uuid/uuid.mjs";
 
 const changeOrderLocationRouter = express.Router();
 
@@ -12,7 +13,7 @@ changeOrderLocationRouter.put('/',verifyToken,(req,res)=>{
        badRequest(req,res);
    } else {
        const {order_unique_id,latitude,longitude,reason} = req.body;
-       db.query(changeOrderLocation,[order_unique_id,req.user.user.unique_id,latitude,longitude,reason])
+       db.query(changeOrderLocation,[order_unique_id,req.user.user.unique_id,latitude,longitude,reason,generateUUID()])
            .then(async result=>{
                if(result.rows.length){
                    await db.query(getCourierUniqueId,[order_unique_id])

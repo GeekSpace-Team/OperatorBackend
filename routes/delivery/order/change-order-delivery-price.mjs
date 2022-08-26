@@ -15,7 +15,7 @@ changeOrderDeliveryPriceRouter.put('/', verifyToken, (req, res) => {
         badRequest(req, res);
     } else {
         const {order_unique_id, delivery_price, reason} = req.body;
-        db.query(changeOrderDeliveryPrice, [order_unique_id, req.user.user.unique_id, delivery_price, reason])
+        db.query(changeOrderDeliveryPrice, [order_unique_id, req.user.user.unique_id, delivery_price, reason,generateUUID()])
             .then(async result => {
                 if (result.rows.length) {
                     let title = `Sargydyň eltip berilmeli bahasy üýtgedi!`;

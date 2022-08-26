@@ -43,7 +43,7 @@ deliveryOrderProductRouter.post('/', verifyToken, async (req, res) => {
                     }
 
                     let orderValues = [];
-                    orderValues.push([order_unique_id, statusOrder, reason, req.user.user.unique_id, 'now()', 'now()']);
+                    orderValues.push([order_unique_id, statusOrder, reason, req.user.user.unique_id, 'now()', 'now()',generateUUID()]);
                     await db.query(format(changeOrderStatuses, orderValues))
                         .then(result_order => {
                         })

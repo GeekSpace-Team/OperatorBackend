@@ -46,7 +46,7 @@ deliveryOrderRouter.post('/', verifyToken, (req, res) => {
         let orderValues = [];
         if (typeof orders !== 'undefined' && orders != null && orders.length > 0) {
             orders.forEach((item, i) => {
-                orderValues.push([item.unique_id, orderStatus.COURIER_DELIVERED, reason, req.user.user.unique_id, 'now()', 'now()']);
+                orderValues.push([item.unique_id, orderStatus.COURIER_DELIVERED, reason, req.user.user.unique_id, 'now()', 'now()',generateUUID()]);
             });
             db.query(format(changeOrderStatuses, orderValues))
                 .then(async result => {
@@ -54,7 +54,7 @@ deliveryOrderRouter.post('/', verifyToken, (req, res) => {
                         let orderProductValues = [];
                         let orderProducts = await getOrderProducts(orders);
                         orderProducts.forEach((item) => {
-                            orderProductValues.push([item.unique_id, orderStatus.COURIER_DELIVERED, req.user.user.unique_id, 'now()', 'now()', reason]);
+                            orderProductValues.push([item.unique_id, orderStatus.COURIER_DELIVERED, req.user.user.unique_id, 'now()', 'now()', reason,generateUUID()]);
                         });
                         await db.query(format(changeOrderProductStatuses, orderProductValues))
                             .then(async result2 => {

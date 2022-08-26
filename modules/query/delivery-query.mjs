@@ -62,13 +62,13 @@ export const addInboxQuery=`
 
 export const changeOrderStatuses=`
 INSERT INTO customer_order_status_history(
-    customer_order_unique_id, status, reason, user_unique_id, created_at, updated_at)
+    customer_order_unique_id, status, reason, user_unique_id, created_at, updated_at,unique_id)
     VALUES %L RETURNING *;
 `;
 
 export const changeOrderProductStatuses=`
 INSERT INTO customer_order_product_status_history(
-    customer_order_product_unique_id, status, user_unique_id, created_at, updated_at, reason)
+    customer_order_product_unique_id, status, user_unique_id, created_at, updated_at, reason,unique_id)
     VALUES %L RETURNING *;
 `;
 

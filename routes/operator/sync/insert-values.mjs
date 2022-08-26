@@ -16,7 +16,7 @@ import {
     insertCustomerOrderStatus,
     insertCustomers,
     insertCustomerStatus,
-    insertFocusWord,
+    insertFocusWord, insertInbox,
     insertRolePermission,
     insertSellPoint,
     insertSpeakAccent,
@@ -90,6 +90,9 @@ const getQuery=(type)=>{
     }
     if(type===tables.users){
         return insertUsers;
+    }
+    if(type===tables.inbox){
+        return insertInbox;
     }
 }
 
@@ -261,6 +264,14 @@ const getValues=async(type,values)=>{
                 fullname, username, password, phone_number, status, user_role, sell_point_id, token, created_at, updated_at, work_start_date, date_of_birthday, unique_id, user_number
             } = e;
             result.push([fullname, username, password, phone_number, status, user_role, sell_point_id, token, created_at, updated_at, work_start_date, date_of_birthday, unique_id, user_number]);
+        })
+    }
+    if(type===tables.inbox){
+        await values.forEach((e,i)=>{
+            const{
+                message, link_to_goal, is_read, is_delete, created_at, updated_at, unique_id, from_unique_id, to_unique_id
+            } = e;
+           result.push([message, link_to_goal, is_read, is_delete, created_at, updated_at, unique_id, from_unique_id, to_unique_id]);
         })
     }
     return result;

@@ -217,6 +217,13 @@ export const insertCustomerOrderStatus=`
         VALUES %L RETURNING *;
 `;
 
+export const insertInbox=`
+    INSERT INTO public.inbox(
+        message, link_to_goal, is_read, is_delete, created_at, updated_at, unique_id, from_unique_id, to_unique_id)
+        VALUES %L RETURNING *;
+`;
+
+
 export const truncateTableQuery=`
     TRUNCATE TABLE %s RESTART IDENTITY;
 `;

@@ -3,6 +3,7 @@ import { verifyToken } from '../../../modules/auth/token.mjs';
 import { db } from '../../../modules/database/connection.mjs';
 import { changeOrderProductStatus } from '../../../modules/query/operator-query.mjs';
 import { badRequest,response } from '../../../modules/response.mjs';
+import {generateUUID} from "../../../modules/uuid/uuid.mjs";
 
 const editOrderProductStatus = express.Router();
 
@@ -15,7 +16,7 @@ editOrderProductStatus.put('/', verifyToken, (req, res) => {
         badRequest(req, res);
     } else {
         const {order_product_unique_id,status,reason} = req.body;
-        db.query(changeOrderProductStatus,[order_product_unique_id,status,req.user.user.unique_id,reason])
+        db.query(changeOrderProductStatus,[order_product_unique_id,status,req.user.user.unique_id,reason,generateUUID()])
         .then(result=>{
             if(result.rows.length){
                 res.json(response(false,'success',result.rows[0]));

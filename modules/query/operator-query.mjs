@@ -219,49 +219,49 @@ INSERT INTO customer_order_product(
 	updated_at, 
 	reason, 
 	operator_unique_id)
-	VALUES %L
+	VALUES %L RETURNING *
 `;
 
 export const addOrderAddress = `
 INSERT INTO customer_order_address_history(
-	customer_order_unique_id, address, user_unique_id, created_at, updated_at, reason)
-	VALUES ($1,$2,$3,now(),now(), $4) RETURNING *;
+	customer_order_unique_id, address, user_unique_id, created_at, updated_at, reason,unique_id)
+	VALUES ($1,$2,$3,now(),now(), $4,$5) RETURNING *;
 `;
 
 export const addOrderCourier = `
 INSERT INTO customer_order_courier_history(
-	customer_order_unique_id, courier_unique_id, operator_unique_id, created_at, updated_at, reason)
-	VALUES ($1,$2,$3, now(), now(),$4) RETURNING *;
+	customer_order_unique_id, courier_unique_id, operator_unique_id, created_at, updated_at, reason,unique_id)
+	VALUES ($1,$2,$3, now(), now(),$4,$5) RETURNING *;
 `;
 
 export const addOrderDate = `
 INSERT INTO customer_order_date_history(
-	customer_order_unique_id, order_date, order_time, user_unique_id, created_at, updated_at, reason)
-	VALUES ($1,$2,$3,$4, now(), now(), $5) RETURNING *;
+	customer_order_unique_id, order_date, order_time, user_unique_id, created_at, updated_at, reason,unique_id)
+	VALUES ($1,$2,$3,$4, now(), now(), $5,$6) RETURNING *;
 `;
 
 export const addOrderDeliveryPrice = `
 INSERT INTO customer_order_delivery_price(
-	customer_order_unique_id, user_unique_id, delivery_price, reason, created_at, updated_at)
-	VALUES ($1, $2,$3,$4,now(),now()) RETURNING *;
+	customer_order_unique_id, user_unique_id, delivery_price, reason, created_at, updated_at,unique_id)
+	VALUES ($1, $2,$3,$4,now(),now(),$5) RETURNING *;
 `;
 
 export const addOrderLocationHistory = `
 INSERT INTO customer_order_location_history(
-	customer_order_unique_id, user_unique_id, latitude, longitude, reason, created_at, updated_at)
-	VALUES ($1, $2, $3, $4, $5, now(), now()) RETURNING *;
+	customer_order_unique_id, user_unique_id, latitude, longitude, reason, created_at, updated_at,unique_id)
+	VALUES ($1, $2, $3, $4, $5, now(), now(),$6) RETURNING *;
 `;
 
 export const addOrderProductStatus = `
 INSERT INTO customer_order_product_status_history(
-	customer_order_product_unique_id, status, user_unique_id, created_at, updated_at, reason)
+	customer_order_product_unique_id, status, user_unique_id, created_at, updated_at, reason,unique_id)
 	VALUES %L RETURNING *;
 `;
 
 export const addOrderStatus = `
 INSERT INTO customer_order_status_history(
-	customer_order_unique_id, status, reason, user_unique_id, created_at, updated_at)
-	VALUES ($1, $2,$3, $4,now(), now()) RETURNING *;
+	customer_order_unique_id, status, reason, user_unique_id, created_at, updated_at,unique_id)
+	VALUES ($1, $2,$3, $4,now(), now(),$5) RETURNING *;
 `;
 
 export const getField = `
@@ -277,44 +277,44 @@ SELECT now(),
 
 export const changeOrderStatus = `
     INSERT INTO public.customer_order_status_history(
-        customer_order_unique_id, status, reason, user_unique_id, created_at, updated_at)
-        VALUES ($1, $2, $3, $4, now(), now()) RETURNING *;
+        customer_order_unique_id, status, reason, user_unique_id, created_at, updated_at,unique_id)
+        VALUES ($1, $2, $3, $4, now(), now(),$5) RETURNING *;
 `;
 
 export const changeOrderCourier = `
 INSERT INTO public.customer_order_courier_history(
-        customer_order_unique_id, courier_unique_id, operator_unique_id, created_at, updated_at, reason)
-        VALUES ($1, $2, $3, now(),now(), $4) RETURNING *;
+        customer_order_unique_id, courier_unique_id, operator_unique_id, created_at, updated_at, reason,unique_id)
+        VALUES ($1, $2, $3, now(),now(), $4,$5) RETURNING *;
 `;
 
 export const changeOrderLocation = `
 INSERT INTO public.customer_order_location_history(
-        customer_order_unique_id, user_unique_id, latitude, longitude, reason, created_at, updated_at)
-        VALUES ($1, $2, $3, $4, $5, now(), now()) RETURNING *;
+        customer_order_unique_id, user_unique_id, latitude, longitude, reason, created_at, updated_at,unique_id)
+        VALUES ($1, $2, $3, $4, $5, now(), now(),$6) RETURNING *;
 `;
 
 export const changeOrderDate = `
 INSERT INTO public.customer_order_date_history(
-        customer_order_unique_id, order_date, order_time, user_unique_id, created_at, updated_at, reason)
-        VALUES ($1, $2, $3, $4, now(), now(), $5) RETURNING *;
+        customer_order_unique_id, order_date, order_time, user_unique_id, created_at, updated_at, reason,unique_id)
+        VALUES ($1, $2, $3, $4, now(), now(), $5,$6) RETURNING *;
 `;
 
 export const changeOrderDeliveryPrice = `
 INSERT INTO public.customer_order_delivery_price(
-        customer_order_unique_id, user_unique_id, delivery_price, reason, created_at, updated_at)
-        VALUES ($1, $2, $3, $4,now(), now()) RETURNING *;
+        customer_order_unique_id, user_unique_id, delivery_price, reason, created_at, updated_at,unique_id)
+        VALUES ($1, $2, $3, $4,now(), now(),$5) RETURNING *;
 `;
 
 export const changeOrderAddress = `
 INSERT INTO public.customer_order_address_history(
-        customer_order_unique_id, address, user_unique_id, created_at, updated_at, reason)
-        VALUES ($1, $2, $3, now(), now(), $4) RETURNING *;
+        customer_order_unique_id, address, user_unique_id, created_at, updated_at, reason,unique_id)
+        VALUES ($1, $2, $3, now(), now(), $4,$5) RETURNING *;
 `;
 
 export const changeOrderProductStatus = `
 INSERT INTO customer_order_product_status_history(
-	customer_order_product_unique_id, status, user_unique_id, created_at, updated_at, reason)
-	VALUES ($1,$2, $3, now(),now(), $4) RETURNING *;
+	customer_order_product_unique_id, status, user_unique_id, created_at, updated_at, reason,unique_id)
+	VALUES ($1,$2, $3, now(),now(), $4,$5) RETURNING *;
 `;
 
 export const getOrders = `
