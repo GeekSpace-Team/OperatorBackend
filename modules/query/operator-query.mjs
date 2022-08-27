@@ -274,6 +274,30 @@ SELECT now(),
 (SELECT array_to_json(array_agg(s.*)) FROM customer_status s) AS customer_status
 `;
 
+export const getOrderByStatusQuery = `
+SELECT o.id, 
+    o.unique_id, o.is_express, o.created_at, 
+    o.updated_at, o.additional_information, 
+    o.customer_unique_id, o.operator_unique_id,
+    c.fullname,c.phone_number,
+    (SELECT array_to_json(array_agg(ca.*)) FROM customer_order_address_history ca WHERE ca.customer_order_unique_id=o.unique_id) as order_address_history,
+    (SELECT array_to_json(array_agg(cd.*)) FROM customer_order_date_history cd WHERE cd.customer_order_unique_id=o.unique_id) as order_date_history,
+    (SELECT array_to_json(array_agg(cp.*)) FROM customer_order_delivery_price cp WHERE cp.customer_order_unique_id=o.unique_id) as order_price_history,
+    (SELECT array_to_json(array_agg(cl.*)) FROM customer_order_location_history cl WHERE cl.customer_order_unique_id=o.unique_id) as order_location_history,
+    (SELECT CASE WHEN s.created_at IS NULL THEN now()
+                 ELSE s.created_at
+            END
+        FROM customer_order_status_history s WHERE s.customer_order_unique_id=o.unique_id ORDER BY s.created_at DESC LIMIT 1) as current_status
+    FROM customer_order o
+    LEFT JOIN customer c ON c.unique_id=o.customer_unique_id
+    WHERE (SELECT ch.status FROM customer_order_status_history ch 
+        WHERE ch.customer_order_unique_id=o.unique_id ORDER BY ch.updated_at DESC LIMIT 1) = $1
+        AND 
+        (SELECT co.courier_unique_id FROM customer_order_courier_history co 
+        WHERE co.customer_order_unique_id=o.unique_id ORDER BY co.updated_at DESC LIMIT 1) = $2
+    ORDER BY o.is_express DESC,o.created_at ASC;
+`;
+
 
 export const changeOrderStatus = `
     INSERT INTO public.customer_order_status_history(

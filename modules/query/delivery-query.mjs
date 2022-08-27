@@ -21,8 +21,8 @@ SELECT o.id,
     (SELECT array_to_json(array_agg(cd.*)) FROM customer_order_date_history cd WHERE cd.customer_order_unique_id=o.unique_id) as order_date_history,
     (SELECT array_to_json(array_agg(cp.*)) FROM customer_order_delivery_price cp WHERE cp.customer_order_unique_id=o.unique_id) as order_price_history,
     (SELECT array_to_json(array_agg(cl.*)) FROM customer_order_location_history cl WHERE cl.customer_order_unique_id=o.unique_id) as order_location_history,
-    (SELECT CASE WHEN s.created_at IS NULL THEN now()
-                 ELSE s.created_at
+    (SELECT CASE WHEN s.status IS NULL THEN '${orderStatus.PENDING}'
+                 ELSE s.status
             END
         FROM customer_order_status_history s WHERE s.customer_order_unique_id=o.unique_id ORDER BY s.created_at DESC LIMIT 1) as current_status
     FROM customer_order o
@@ -45,8 +45,8 @@ SELECT o.id,
     (SELECT array_to_json(array_agg(cd.*)) FROM customer_order_date_history cd WHERE cd.customer_order_unique_id=o.unique_id) as order_date_history,
     (SELECT array_to_json(array_agg(cp.*)) FROM customer_order_delivery_price cp WHERE cp.customer_order_unique_id=o.unique_id) as order_price_history,
     (SELECT array_to_json(array_agg(cl.*)) FROM customer_order_location_history cl WHERE cl.customer_order_unique_id=o.unique_id) as order_location_history,
-    (SELECT CASE WHEN s.created_at IS NULL THEN now()
-                 ELSE s.created_at
+    (SELECT CASE WHEN s.status IS NULL THEN '${orderStatus.PENDING}'
+                 ELSE s.status
             END
         FROM customer_order_status_history s WHERE s.customer_order_unique_id=o.unique_id ORDER BY s.created_at DESC LIMIT 1) as current_status
     FROM customer_order o

@@ -1,8 +1,8 @@
 import express from 'express';
 import {badRequest, response} from "../../../modules/response.mjs";
 import {verifyToken} from "../../../modules/auth/token.mjs";
-import {getOrderByStatusQuery} from "../../../modules/query/delivery-query.mjs";
 import {db} from "../../../modules/database/connection.mjs";
+import {getOrderByStatusQuery} from "../../../modules/query/operator-query.mjs";
 
 const getOrderByStatus = express.Router();
 
