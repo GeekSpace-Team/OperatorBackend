@@ -70,7 +70,7 @@ cancelOrderRouter.post('/', verifyToken, (req, res) => {
                                         .then(async result_operator => {
                                             if (result_operator.rows.length) {
                                                 result_operator.rows.forEach(async (item, i) => {
-                                                    to.push([title, message, '/order?unique_id'+item.unique_id, false, false, 'now()', 'now()',
+                                                    to.push([title, message, '/order?unique_id='+item.unique_id, false, false, 'now()', 'now()',
                                                         generateUUID(),
                                                         req.user.user.unique_id,
                                                         item.operator_unique_id]);
