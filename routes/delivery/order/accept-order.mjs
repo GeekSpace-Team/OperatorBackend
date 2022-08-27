@@ -59,8 +59,8 @@ acceptOrderRouter.post('/', verifyToken, (req, res) => {
                         await db.query(format(changeOrderProductStatuses, orderProductValues))
                             .then(async result2 => {
                                 if (result2.rows.length) {
-                                    let title = `Sargyt tassyklandy!`;
-                                    let message = `Sargydyň statusy eltip beriji tarapyndan üýtgedildi!`;
+                                    let title = `Sargyt kabul edildi!`;
+                                    let message = `Sargyt eltip beriji tarapyndan kabul edildi!`;
                                     let to = [];
                                     let myArray = [];
                                     await orders.forEach((item, i) => {
@@ -70,7 +70,7 @@ acceptOrderRouter.post('/', verifyToken, (req, res) => {
                                         .then(async result_operator => {
                                             if (result_operator.rows.length) {
                                                 result_operator.rows.forEach(async (item, i) => {
-                                                    to.push([title, message, '/order', false, false, 'now()', 'now()',
+                                                    to.push([title, message, '/order?unique_id'+item.unique_id, false, false, 'now()', 'now()',
                                                         generateUUID(),
                                                         req.user.user.unique_id,
                                                         item.operator_unique_id]);

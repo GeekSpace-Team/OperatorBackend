@@ -40,7 +40,7 @@ changeOrderDeliveryPriceRouter.put('/', verifyToken, (req, res) => {
                     await db.query(addInboxQuery, [
                         title,
                         message,
-                        '/order',
+                        '/order?unique_id'+order_unique_id,
                         generateUUID(),
                         req.user.user.unique_id,
                         to

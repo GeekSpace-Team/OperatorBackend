@@ -50,8 +50,8 @@ deliveryOrderProductRouter.post('/', verifyToken, async (req, res) => {
                         .catch(err => {
                             console.log(err+" Order//");
                         });
-                    let title = `Sargyt statusy üýtgedildi!`;
-                    let message = `Sargyt statusy eltip beriji tarapyndan üýtgedildi!`;
+                    let title = `Sargyt harytlarynyň statusy üýtgedildi!`;
+                    let message = `Sargyt harytlarynyň statusy eltip beriji tarapyndan üýtgedildi!`;
                     let to = '';
                     await db.query(getOrderOperatorUniqueId, [order_unique_id])
                         .then(async result_courier => {
@@ -74,7 +74,7 @@ deliveryOrderProductRouter.post('/', verifyToken, async (req, res) => {
                     await db.query(addInboxQuery, [
                         title,
                         message,
-                        '/order',
+                        '/order?unique_id'+order_unique_id,
                         generateUUID(),
                         req.user.user.unique_id,
                         to
