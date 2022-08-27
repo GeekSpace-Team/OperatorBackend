@@ -39,6 +39,7 @@ import {getAllOrders} from "./sync/get-all-orders.mjs";
 import {checkByUniqueId} from "./sync/check-by-unique-id.mjs";
 import {insertValues} from "./sync/insert-values.mjs";
 import {truncateTable} from "./sync/truncate-table.mjs";
+import {getOrderByStatus} from "./courier/get-order-by-status.mjs";
 
 const operatorRouter = express.Router();
 
@@ -87,6 +88,7 @@ operatorRouter.use('/mark-as-read',markAsReadRouter);
 operatorRouter.use('/get-inbox',getInboxRouter);
 operatorRouter.use('/get-unread-inbox-count',getUnreadInboxCount);
 operatorRouter.use('/get-all-customer',getAllCustomerRouter);
+operatorRouter.use('/get-order-by-status',getOrderByStatus);
 
 //SYNC
 operatorRouter.use('/get-all-customers',getAllCustomer);
