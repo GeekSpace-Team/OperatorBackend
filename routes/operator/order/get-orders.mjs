@@ -48,7 +48,7 @@ getOrdersRouter.post('/',verifyToken,(req,res) => {
             } else {
                 whereQuery+=" WHERE ";
             }
-            whereQuery += ` (c.additional_information ILIKE '%${search}%' OR cus.fullname ILIKE '%${search}%' OR cus.phone_number ILIKE '%${search}%' OR cus.address_home ILIKE '%${search}%' OR cus.address_work ILIKE '%${search}%' OR cus.information ILIKE '%${search}%') `;
+            whereQuery += ` (c.additional_information ILIKE '%${search}%' OR cus.fullname ILIKE '%${search}%' OR cus.phone_number ILIKE '%${search}%' OR cus.address_home ILIKE '%${search}%' OR cus.address_work ILIKE '%${search}%' OR cus.information ILIKE '%${search}%' OR c.unique_id='${search}') `;
         }
 
         let query = format(getOrders,whereQuery,orderByQuery);
