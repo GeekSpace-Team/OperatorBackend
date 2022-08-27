@@ -53,6 +53,8 @@ getOrdersRouter.post('/',verifyToken,(req,res) => {
 
         let query = format(getOrders,whereQuery,orderByQuery);
 
+        console.log(query);
+
         db.query(query,[req.user.user.unique_id,perPage,page])
         .then(result=>{
             if(page==1){

@@ -8,6 +8,7 @@ import {acceptOrderRouter} from "./order/accept-order.mjs";
 import {deliveryOrderRouter} from "./order/delivery-order.mjs";
 import {deliveryOrderProductRouter} from "./order/delivery-order-product.mjs";
 import { getCancelReasonRouter } from './order/get-cancel-reason.mjs';
+import {getOrderByUniqueId} from "./order/get-order-by-unique-id.mjs";
 
 const deliveryRouter = express.Router();
 
@@ -20,5 +21,6 @@ deliveryRouter.use('/accept-order',acceptOrderRouter);
 deliveryRouter.use('/delivery-order',deliveryOrderRouter);
 deliveryRouter.use('/delivery-order-producs',deliveryOrderProductRouter);
 deliveryRouter.use('/get-cancel-reason',getCancelReasonRouter);
+deliveryRouter.use('/get-order-by-unique-id',getOrderByUniqueId);
 
 export {deliveryRouter};
