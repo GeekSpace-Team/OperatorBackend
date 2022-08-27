@@ -32,7 +32,7 @@ deliveryOrderProductRouter.post('/', verifyToken, async (req, res) => {
             if (item.order_product_status == orderStatus.COURIER_DELIVERED) {
                 isDelivered = true;
             }
-            values.push([item.unique_id, item.order_product_status, req.user.user.unique_id, 'now()', 'now()', reason]);
+            values.push([item.unique_id, item.order_product_status, req.user.user.unique_id, 'now()', 'now()', reason,generateUUID()]);
         });
         await db.query(format(changeOrderProductStatuses, values))
             .then(async result => {

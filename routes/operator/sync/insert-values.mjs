@@ -24,6 +24,7 @@ import {
 } from "../../../modules/query/sync-query.mjs";
 import {db} from "../../../modules/database/connection.mjs";
 import format from "pg-format";
+import {verifyToken} from "../../../modules/auth/token.mjs";
 
 const insertValues = express.Router();
 
@@ -288,7 +289,7 @@ const getValues=async(type,values)=>{
     return result;
 }
 
-insertValues.post('/', async (req, res) => {
+insertValues.post('/', verifyToken,async (req, res) => {
         const {
             values,
             type
