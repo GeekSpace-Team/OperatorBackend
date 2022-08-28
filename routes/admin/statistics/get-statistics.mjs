@@ -18,13 +18,17 @@ getStatistics.post('/',verifyToken,async (req, res) => {
         } = req.body;
 
         if(typeof start_date !== 'undefined' && start_date != null && start_date != ''){
-            let endD=new Date("YYYY-MM-DD");
-            if(typeof end_date !== 'undefined' && end_date != null && end_date != ''){
-                endD = end_date;
+            let endD=new Date();
+            if(end_date != null && end_date !== '' && typeof end_date !== 'undefined' && end_date != 0){
+                endD=end_date;
+            } else {
+                endD=`${endD.getFullYear()}-${endD.getMonth()+1}-${endD.getDate()}`;
             }
             whereQuery=` AND  ((o.created_at,o.created_at) OVERLAPS ('${start_date}'::DATE,'${endD}'::DATE)) `;
         }
-        db.query(format(getStatisticsQuery,whereQuery,whereQuery))
+        let query=format(getStatisticsQuery,whereQuery,whereQuery);
+        console.log(query);
+        db.query(query)
             .then(result=>{
                 res.json(response(false,'success',result.rows));
                 res.end();
