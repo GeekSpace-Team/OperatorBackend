@@ -7,37 +7,56 @@ import {badRequest, response} from "../../../modules/response.mjs";
 const getInboxRouter = express.Router();
 
 getInboxRouter.get('/', verifyToken,(req, res) => {
-    const {page} = req.query;
+    let {page} = req.query;
+    if(page<=0){
+        page=1;
+    }
     db.query(getInboxQuery,[req.user.user.unique_id,40,page])
         .then(result=>{
-            // if(typeof page === 'undefined' || page == null || page == 1){
-                db.query(getInboxCountQuery,[req.user.user.unique_id])
-                    .then(result2=>{
-                        let page_count = Math.ceil(result2.rows.length/40);
-                        if(page_count <= 0){
-                            page_count = 1;
-                        }
-                        res.json(response(false,'success',{
-                            page_count:page_count,
-                            inbox:result.rows
-                        }));
-                        res.end();
-                    })
-                    .catch(err=>{
-                        res.json(response(false,'success',{
-                            page_count:0,
-                            inbox:result.rows
-                        }));
-                        res.end();
-                    });
+            if(result.rows.length>0) {
+                // if(typeof page === 'undefined' || page == null || page == 1){
+                try{
+                    db.query(getInboxCountQuery, [req.user.user.unique_id])
+                        .then(result2 => {
+                            let page_count = Math.ceil(result2.rows.length / 40);
+                            if (page_count <= 0) {
+                                page_count = 1;
+                            }
+                            res.json(response(false, 'success', {
+                                page_count: page_count,
+                                inbox: result.rows
+                            }));
+                            res.end();
+                        })
+                        .catch(err => {
+                            res.json(response(false, 'success', {
+                                page_count: 0,
+                                inbox: result.rows
+                            }));
+                            res.end();
+                        });
+                } catch (er){
+                    res.json(response(false, 'success', {
+                        page_count: 0,
+                        inbox: result.rows
+                    }));
+                    res.end();
+                }
 
-            // } else {
-            //     res.json(response(false,'success',{
-            //         page_count:null,
-            //         inbox:result.rows
-            //     }));
-            //     res.end();
-            // }
+                // } else {
+                //     res.json(response(false,'success',{
+                //         page_count:null,
+                //         inbox:result.rows
+                //     }));
+                //     res.end();
+                // }
+            } else {
+                res.json(response(false, 'success', {
+                    page_count: 0,
+                    inbox: result.rows
+                }));
+                res.end();
+            }
 
         })
         .catch(err=>{
