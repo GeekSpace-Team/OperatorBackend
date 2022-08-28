@@ -295,7 +295,7 @@ SELECT o.id,
         AND 
         (SELECT co.courier_unique_id FROM customer_order_courier_history co 
         WHERE co.customer_order_unique_id=o.unique_id ORDER BY co.updated_at DESC LIMIT 1) = $2
-    ORDER BY o.is_express DESC,o.created_at DESC;
+    ORDER BY o.is_express DESC,o.created_at ASC;
 `;
 
 
