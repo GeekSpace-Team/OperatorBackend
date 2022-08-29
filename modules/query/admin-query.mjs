@@ -221,3 +221,23 @@ work_start_date=$8, date_of_birthday=$9
 export const deleteCourierQuery=`
 DELETE FROM public.courier WHERE unique_id=$1;
 `;
+
+export const addCancelReasonQuery=`
+INSERT INTO public.cancel_reason(
+    unique_id, sell_point_id, reason, created_at, updated_at)
+    VALUES ($1, $2, $3, now(), now()) RETURNING *;
+`;
+
+export const updateCancelReasonQuery=`
+UPDATE public.cancel_reason
+    SET  sell_point_id=$1, reason=$2, updated_at=now()
+    WHERE unique_id=$3 RETURNING *;
+`;
+
+export const deleteCancelReasonQuery=`
+DELETE FROM public.cancel_reason WHERE unique_id=$1;
+`;
+
+export const getCancelReasonQuery=`
+SELECT id, unique_id, sell_point_id, reason, created_at, updated_at FROM public.cancel_reason ORDER BY created_at DESC;
+`;

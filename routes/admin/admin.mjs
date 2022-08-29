@@ -23,6 +23,10 @@ import {deleteUser} from "./users/delete-user.mjs";
 import {updateCourier} from "./courier/update-user.mjs";
 import {deleteCourier} from "./courier/delete-user.mjs";
 import {getCourierRouter} from "./courier/get-user-by-role-name.mjs";
+import {addCancelReason} from "./cancel-reason/add-cancel-reason.mjs";
+import {updateCancelReason} from "./cancel-reason/update-cancel-reason.mjs";
+import {deleteCancelReason} from "./cancel-reason/delete-cancel-reason.mjs";
+import {getCancelReason} from "./cancel-reason/get-cancel-reason.mjs";
 
 const adminRouter = express.Router();
 
@@ -50,5 +54,9 @@ adminRouter.use('/add-courier',addCourier);
 adminRouter.use('/update-courier',updateCourier);
 adminRouter.use('/delete-courier',deleteCourier);
 adminRouter.use('/get-courier',getCourierRouter);
+adminRouter.use('/add-cancel-reason',addCancelReason);
+adminRouter.use('/update-cancel-reason',updateCancelReason);
+adminRouter.use('/delete-cancel-reason',deleteCancelReason);
+adminRouter.use('/get-cancel-reason',getCancelReason);
 
 export {adminRouter};
