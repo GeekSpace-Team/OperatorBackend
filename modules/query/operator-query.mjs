@@ -305,6 +305,7 @@ export const changeOrderStatus = `
         VALUES ($1, $2, $3, $4, now(), now(),$5) RETURNING *;
 `;
 
+
 export const changeOrderCourier = `
 INSERT INTO public.customer_order_courier_history(
         customer_order_unique_id, courier_unique_id, operator_unique_id, created_at, updated_at, reason,unique_id)
