@@ -399,7 +399,7 @@ LEFT JOIN courier cor ON cor.unique_id=(SELECT courier.courier_unique_id FROM cu
 
 %s
 %s
-LIMIT $2 OFFSET ($3 - 1) * $2;
+LIMIT $1 OFFSET ($2 - 1) * $1;
 `;
 
 

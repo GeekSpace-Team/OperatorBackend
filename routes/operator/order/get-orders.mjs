@@ -12,7 +12,7 @@ getOrdersRouter.post('/',verifyToken,(req,res) => {
         badRequest(req,res);
     } else {
         const {startDate,endDate,sortBy,perPage,page,search}=req.body;
-        let whereQuery=' WHERE 1==1 ';
+        let whereQuery=' WHERE 1=1 ';
         let orderByQuery=' ORDER BY c.created_at DESC ';
 
         if(startDate != null && startDate != '' && typeof startDate !== 'undefined'){
@@ -55,11 +55,11 @@ getOrdersRouter.post('/',verifyToken,(req,res) => {
 
         console.log(query);
 
-        db.query(query,[req.user.user.unique_id,perPage,page])
+        db.query(query,[perPage,page])
         .then(result=>{
             if(page==1){
                 let countQuery=format(getOrdersCount,whereQuery,orderByQuery);
-                db.query(countQuery,[req.user.user.unique_id])
+                db.query(countQuery,[])
                 .then(result_count=>{
                     let page_count = Math.ceil(result_count.rows.length/perPage);
                     if(page_count <= 0){
