@@ -128,7 +128,6 @@ addOrderRouter.post('/', verifyToken, async (req, res) => {
                 });
         }
 
-        console.log(courier_unique_id);
 
         if (typeof courier_unique_id !== 'undefined' && courier_unique_id != null && courier_unique_id !== '') {
             db.query(addOrderCourier, [
@@ -138,7 +137,16 @@ addOrderRouter.post('/', verifyToken, async (req, res) => {
                 '',
                 generateUUID()
             ])
-                .then(result => { })
+                .then(async result => { 
+                    await sendMessage(courier_unique_id,
+                        `ÜNS BERIŇ SIZE TÄZE SARGYT BERKIDILDI!`,
+                        `SARGYDY GÖRMEK ÜÇIN ÜSTÜNE BASYŇ`,
+                        {
+                        order_unique_id:insertedOrderUniqueId,
+                        courier_unique_id:courier_unique_id,
+                        user_unique_id:req.user.user.unique_id
+                    });
+                })
                 .catch(err => {
                     console.log(`5: ${err}`);
                 });
