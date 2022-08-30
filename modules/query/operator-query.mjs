@@ -71,8 +71,8 @@ export const updateByLastCallState = `
 
 export const getMissedCall = `
 SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,c.address_home,c.address_work,cs.value AS user_status,c.unique_id as customer_unique_id,
-(SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number) AS all_call_history_count,
-(SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number) AS call_history
+(SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number  AND p3.user_unique_id=$1) AS all_call_history_count,
+(SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number  AND p2.user_unique_id=$1) AS call_history
 FROM phone_call p 
 LEFT JOIN customer c ON c.phone_number=p.phone_number
 LEFT JOIN customer_status cs ON cs.id=c.status
@@ -84,8 +84,8 @@ LIMIT $2 OFFSET ($3 - 1) * $2;
 
 export const getMissedCallCount = `
 SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,
-(SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number) AS all_call_history_count,
-(SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number) AS call_history
+(SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number  AND p3.user_unique_id=$1) AS all_call_history_count,
+(SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number  AND p2.user_unique_id=$1) AS call_history
 FROM phone_call p 
 LEFT JOIN customer c ON c.phone_number=p.phone_number
 WHERE (p.call_state='${callStatus.REJECTED}' OR p.call_state='${callStatus.ACCEPTED_AFTER_REJECTED}') AND p.user_unique_id=$1
@@ -95,8 +95,8 @@ WHERE (p.call_state='${callStatus.REJECTED}' OR p.call_state='${callStatus.ACCEP
 
 export const getAcceptedCall = `
 SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,c.address_home,c.address_work,cs.value AS user_status,c.unique_id as customer_unique_id,
-(SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number) AS all_call_history_count,
-(SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number) AS call_history
+(SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number AND p3.user_unique_id=$1) AS all_call_history_count,
+(SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number AND p2.user_unique_id=$1) AS call_history
 FROM phone_call p 
 LEFT JOIN customer c ON c.phone_number=p.phone_number
 LEFT JOIN customer_status cs ON cs.id=c.status
@@ -108,8 +108,8 @@ LIMIT $2 OFFSET ($3 - 1) * $2;
 
 export const getAcceptedCallCount = `
 SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,
-(SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number) AS all_call_history_count,
-(SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number) AS call_history
+(SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number  AND p3.user_unique_id=$1) AS all_call_history_count,
+(SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number  AND p2.user_unique_id=$1) AS call_history
 FROM phone_call p 
 LEFT JOIN customer c ON c.phone_number=p.phone_number
 WHERE (p.call_state='${callStatus.ACCEPTED}') AND p.user_unique_id=$1
