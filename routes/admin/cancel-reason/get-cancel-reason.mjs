@@ -16,6 +16,7 @@ getCancelReason.get('/',verifyToken, async (req, res) => {
                 res.end();
             })
             .catch(err=>{
+                console.log(err);
                 badRequest(req,res);
             })
     }

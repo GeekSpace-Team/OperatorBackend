@@ -239,5 +239,7 @@ DELETE FROM public.cancel_reason WHERE unique_id=$1;
 `;
 
 export const getCancelReasonQuery=`
-SELECT id, unique_id, sell_point_id, reason, created_at, updated_at FROM public.cancel_reason ORDER BY created_at DESC;
+SELECT c.*,s.name as sell_point_name FROM public.cancel_reason c
+LEFT JOIN sell_point s ON s.id=CAST(coalesce(c.sell_point_id, '0') AS integer)
+ ORDER BY created_at DESC;
 `;
