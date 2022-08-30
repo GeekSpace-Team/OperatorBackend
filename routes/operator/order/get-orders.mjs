@@ -12,7 +12,7 @@ getOrdersRouter.post('/',verifyToken,(req,res) => {
         badRequest(req,res);
     } else {
         const {startDate,endDate,sortBy,perPage,page,search}=req.body;
-        let whereQuery=' WHERE c.operator_unique_id = $1 ';
+        let whereQuery=' WHERE 1==1 ';
         let orderByQuery=' ORDER BY c.created_at DESC ';
 
         if(startDate != null && startDate != '' && typeof startDate !== 'undefined'){
