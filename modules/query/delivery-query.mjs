@@ -6,7 +6,7 @@ SELECT u.*,r.name as role_name,
 FROM courier u 
 LEFT JOIN user_role r ON r.id=u.user_role
 LEFT JOIN sell_point s ON s.id=u.sell_point_id
-WHERE u.username=$1 AND u.password=$2;
+WHERE u.username=$1 AND u.password=$2 AND r.name='operator';
 `;
 
 export const updateToken = "UPDATE courier SET token=$1 WHERE unique_id=$2 RETURNING *";
