@@ -56,6 +56,7 @@ missedCallRouter.post('/',verifyToken,(req,res) => {
         .then(result=>{
             if(page==1){
                 let countQuery=format(getMissedCallCount,whereQuery,orderByQuery);
+                console.log(req.user.user.unique_id);
                 db.query(countQuery,[req.user.user.unique_id])
                 .then(result_count=>{
                     let page_count = Math.ceil(result_count.rows.length/perPage);

@@ -44,7 +44,9 @@ WHERE o.operator_unique_id = u1.unique_id %s
 
 
 
-FROM public.users u1 WHERE u1.sell_point_id=$1;
+FROM public.users u1
+LEFT JOIN user_role r ON r.id=u1.user_role
+WHERE u1.sell_point_id=$1 AND r.name='operator';
 `;
 
 export const getCourierStatisticsQuery=`
