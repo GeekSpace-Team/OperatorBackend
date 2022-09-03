@@ -12,15 +12,19 @@ import {
     getAllOrderProductStatus, getAllOrderStatus
 } from "../../../modules/query/sync-query.mjs";
 import {verifyToken} from "../../../modules/auth/token.mjs";
+import format from 'pg-format';
+import { getSellPointId } from '../../../modules/query/operator-query.mjs';
 
 const getAllOrders = express.Router();
 
 getAllOrders.get('/', verifyToken,async (req, res) => {
-    db.query(`${getAllCustomerOrders} ${getAllCustomerOrderAddress}
-                ${getAllOrderCourier} ${getAllOrderDate}
-                ${getAllOrderDelivery} ${getAllOrderLocation}
-                ${getAllOrderProduct} ${getAllOrderProductStatus}
-                ${getAllOrderStatus}`)
+    let sell_point_id=req.query.sell_point_id;
+    console.log(sell_point_id);
+    await db.query(`${format(getAllCustomerOrders,sell_point_id)} ${format(getAllCustomerOrderAddress,sell_point_id)}
+                ${format(getAllOrderCourier,sell_point_id)} ${format(getAllOrderDate,sell_point_id)}
+                ${format(getAllOrderDelivery,sell_point_id)} ${format(getAllOrderLocation,sell_point_id)}
+                ${format(getAllOrderProduct,sell_point_id)} ${format(getAllOrderProductStatus,sell_point_id)}
+                ${format(getAllOrderStatus,sell_point_id)}`)
         .then(results=>{
             res.json(response(false,'success',{
                 orders:results[0].rows,

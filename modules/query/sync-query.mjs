@@ -54,39 +54,66 @@ export const getAllUsers=`
 
 // ORDERS
 export const getAllCustomerOrders=`
-    SELECT * FROM customer_order;
+    SELECT co.*,us.sell_point_id FROM public.customer_order co
+    LEFT JOIN users us ON us.unique_id=co.operator_unique_id
+    WHERE us.sell_point_id=%s;
 `;
 
 export const getAllCustomerOrderAddress=`
-    SELECT * FROM customer_order_address_history;
+    SELECT cao.*,co.operator_unique_id,us.sell_point_id FROM customer_order_address_history cao 
+    LEFT JOIN customer_order co ON co.unique_id=cao.customer_order_unique_id
+    LEFT JOIN users us ON us.unique_id = co.operator_unique_id
+    WHERE us.sell_point_id=%s;
 `;
 
 export const getAllOrderCourier=`
-    SELECT * FROM customer_order_courier_history;
+    SELECT cao.*,co.operator_unique_id,us.sell_point_id FROM customer_order_courier_history cao 
+    LEFT JOIN customer_order co ON co.unique_id=cao.customer_order_unique_id
+    LEFT JOIN users us ON us.unique_id = co.operator_unique_id
+    WHERE us.sell_point_id=%s;
 `;
 
 export const getAllOrderDate=`
-    SELECT * FROM customer_order_date_history;
+    SELECT cao.*,co.operator_unique_id,us.sell_point_id FROM customer_order_date_history cao 
+    LEFT JOIN customer_order co ON co.unique_id=cao.customer_order_unique_id
+    LEFT JOIN users us ON us.unique_id = co.operator_unique_id
+    WHERE us.sell_point_id=%s;
 `;
 
 export const getAllOrderDelivery=`
-    SELECT * FROM customer_order_delivery_price;
+    SELECT cao.*,co.operator_unique_id,us.sell_point_id FROM customer_order_delivery_price cao 
+    LEFT JOIN customer_order co ON co.unique_id=cao.customer_order_unique_id
+    LEFT JOIN users us ON us.unique_id = co.operator_unique_id
+    WHERE us.sell_point_id=%s;
 `;
 
 export const getAllOrderLocation=`
-    SELECT * FROM customer_order_location_history;
+    SELECT cao.*,co.operator_unique_id,us.sell_point_id FROM customer_order_location_history cao 
+    LEFT JOIN customer_order co ON co.unique_id=cao.customer_order_unique_id
+    LEFT JOIN users us ON us.unique_id = co.operator_unique_id
+    WHERE us.sell_point_id=%s;
 `;
 
 export const getAllOrderProduct=`
-    SELECT * FROM customer_order_product;
+    SELECT cao.*,co.operator_unique_id,us.sell_point_id FROM customer_order_product cao 
+    LEFT JOIN customer_order co ON co.unique_id=cao.customer_order_unique_id
+    LEFT JOIN users us ON us.unique_id = co.operator_unique_id
+    WHERE us.sell_point_id=%s;
 `;
 
 export const getAllOrderProductStatus=`
-    SELECT * FROM customer_order_product_status_history;
+    SELECT cao.*,co.operator_unique_id,us.sell_point_id FROM customer_order_product_status_history cao 
+    LEFT JOIN customer_order_product cop ON cop.unique_id=cao.customer_order_product_unique_id
+    LEFT JOIN customer_order co ON co.unique_id=cop.customer_order_unique_id
+    LEFT JOIN users us ON us.unique_id = co.operator_unique_id
+    WHERE us.sell_point_id=%s;
 `;
 
 export const getAllOrderStatus=`
-    SELECT * FROM customer_order_status_history;
+    SELECT cao.*,co.operator_unique_id,us.sell_point_id FROM customer_order_status_history cao 
+    LEFT JOIN customer_order co ON co.unique_id=cao.customer_order_unique_id
+    LEFT JOIN users us ON us.unique_id = co.operator_unique_id
+    WHERE us.sell_point_id=%s;
 `;
 
 

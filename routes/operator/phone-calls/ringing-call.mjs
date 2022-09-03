@@ -88,6 +88,15 @@ const callDataChanger = (req, res, next) => {
         .catch((err) => {
           exist = false;
         });
+
+        let cd=new Date();
+        let callDate=`${cd.getFullYear()}-${cd.getMonth()+1}-${cd.getDate()}`;
+        let callTime=`${cd.getHours()}:${cd.getMinutes()}:${cd.getSeconds()}`;
+
+        console.log(`Senesi: ${callDate}`);
+
+        req.body.callDate=callDate;
+        req.body.callTime=callTime;
   
       console.log(req.body.callDuration);
       const data = {
@@ -113,6 +122,8 @@ const callDataChanger = (req, res, next) => {
           .then((result) => {})
           .catch((err) => {});
       }
+
+    
   
       if (exist) {
         await db
@@ -120,8 +131,8 @@ const callDataChanger = (req, res, next) => {
             req.body.phNumber,
             req.body.contactName,
             req.body.callType,
-            req.body.callDate,
-            req.body.callTime,
+            callDate,
+            callTime,
             req.body.callDuration,
             req.body.state,
             req.user.user.unique_id,
@@ -144,8 +155,8 @@ const callDataChanger = (req, res, next) => {
             req.body.phNumber,
             req.body.contactName,
             req.body.callType,
-            req.body.callDate,
-            req.body.callTime,
+            callDate,
+            callTime,
             req.body.callDuration,
             req.body.uniqueId,
             req.body.state,
