@@ -49,6 +49,15 @@ LEFT JOIN user_role r ON r.id=u1.user_role
 WHERE u1.sell_point_id=$1 AND r.name='operator';
 `;
 
+export const loginQuery = `
+SELECT u.*,r.name as role_name,
+(SELECT array_to_json(array_agg(p.*)) FROM role_permission p WHERE p.user_role=u.user_role) as user_permissions
+FROM users u 
+LEFT JOIN user_role r ON r.id=u.user_role
+LEFT JOIN sell_point s ON s.id=u.sell_point_id
+WHERE u.username=$1 AND u.password=$2 AND (r.name='admin' OR r.name='superadmin' OR r.name='moderator');
+`;
+
 export const getCourierStatisticsQuery=`
 SELECT u1.*,
     (SELECT  array_to_json(array_agg(op.*)) FROM public.customer_order_product op
