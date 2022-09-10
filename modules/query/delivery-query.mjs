@@ -6,7 +6,7 @@ SELECT u.*,r.name as role_name,
 FROM courier u 
 LEFT JOIN user_role r ON r.id=u.user_role
 LEFT JOIN sell_point s ON s.id=u.sell_point_id
-WHERE u.username=$1 AND u.password=$2 AND r.name='operator';
+WHERE u.username=$1 AND u.password=$2 AND r.name='courier';
 `;
 
 export const updateToken = "UPDATE courier SET token=$1 WHERE unique_id=$2 RETURNING *";
@@ -72,40 +72,40 @@ SELECT cp.id,
     WHERE cp.customer_order_unique_id=$1;
 `;
 
-export const getOrderOperatorUniqueId=`
+export const getOrderOperatorUniqueId = `
     SELECT operator_unique_id
     FROM customer_order WHERE unique_id=$1;
 `;
 
-export const addInboxQuery=`
+export const addInboxQuery = `
     INSERT INTO inbox(
         title, message, link_to_goal, is_read, is_delete, created_at, updated_at, unique_id, from_unique_id, to_unique_id)
     VALUES ($1, $2, $3, false, false, now(), now(), $4,$5, $6);
 `;
 
-export const changeOrderStatuses=`
+export const changeOrderStatuses = `
 INSERT INTO customer_order_status_history(
     customer_order_unique_id, status, reason, user_unique_id, created_at, updated_at,unique_id)
     VALUES %L RETURNING *;
 `;
 
-export const changeOrderProductStatuses=`
+export const changeOrderProductStatuses = `
 INSERT INTO customer_order_product_status_history(
     customer_order_product_unique_id, status, user_unique_id, created_at, updated_at, reason,unique_id)
     VALUES %L RETURNING *;
 `;
 
-export const getOrderProductsQuery=`
+export const getOrderProductsQuery = `
     SELECT unique_id
     FROM customer_order_product WHERE customer_order_unique_id IN (%L);
 `;
 
-export const getOrdersOperatorUniqueId=`
+export const getOrdersOperatorUniqueId = `
     SELECT operator_unique_id,unique_id
     FROM customer_order WHERE unique_id IN (%L);
 `;
 
-export const addMultipleInboxQuery=`
+export const addMultipleInboxQuery = `
     INSERT INTO inbox(
         title, message, link_to_goal, is_read, is_delete, created_at, updated_at, unique_id, from_unique_id, to_unique_id)
     VALUES %L RETURNING *;

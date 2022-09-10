@@ -427,6 +427,7 @@ cor.phone_number AS courier_phone_number,
 (SELECT array_to_json(array_agg(p.*)) FROM customer_order_product p WHERE p.customer_order_unique_id=c.unique_id) AS products
 FROM customer_order c
 LEFT JOIN customer cus ON cus.unique_id=c.customer_unique_id
+LEFT JOIN users uss ON uss.unique_id=c.operator_unique_id
 LEFT JOIN courier cor ON cor.unique_id=(SELECT courier.courier_unique_id FROM customer_order_courier_history courier WHERE courier.customer_order_unique_id=c.unique_id ORDER BY updated_at DESC LIMIT 1)
 %s
 %s
@@ -439,7 +440,7 @@ SELECT id, customer_order_product_unique_id, status, user_unique_id, created_at,
 	WHERE customer_order_product_unique_id IN (%L);
 `;
 
-export const getSellPointId=`SELECT sell_point_id
+export const getSellPointId = `SELECT sell_point_id
 FROM users WHERE unique_id=$1;`;
 
 export const getCouriers = `
@@ -518,13 +519,13 @@ export const getCourierUniqueId = `
     FROM customer_order_courier_history WHERE customer_order_unique_id=$1 ORDER BY updated_at DESC LIMIT 1;
 `;
 
-export const getAllCustomer=`
+export const getAllCustomer = `
 SELECT id, fullname, phone_number, question_mode, find_us, address_home, address_work, information, created_at, updated_at, unique_id, operator_unique_id, speak_mode, status, speak_tone, speak_accent, focus_word
     FROM public.customer;
 `;
 
 
-export const updateOrderInfo=`
+export const updateOrderInfo = `
 UPDATE public.customer_order
     SET is_express=$1, updated_at='now()', additional_information=$2, customer_unique_id=$3
     WHERE unique_id=$4;
