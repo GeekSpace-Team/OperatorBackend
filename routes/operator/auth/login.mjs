@@ -1,12 +1,10 @@
-import express from 'express';
-import jwt from 'jsonwebtoken';
-import { loginType, secret_key } from '../../../modules/constant/constant.mjs';
-import { db } from '../../../modules/database/connection.mjs';
-import { fcmTokenInsert, insertLoginHistory, loginQuery, updateToken } from '../../../modules/query/operator-query.mjs';
-import { badRequest, response } from '../../../modules/response.mjs';
-import { generateUUID } from '../../../modules/uuid/uuid.mjs';
-
-
+import express from "express";
+import jwt from "jsonwebtoken";
+import { loginType, secret_key } from "../../../modules/constant/constant.mjs";
+import { db } from "../../../modules/database/connection.mjs";
+import { fcmTokenInsert, insertLoginHistory, loginQuery, updateToken } from "../../../modules/query/operator-query.mjs";
+import { badRequest, response } from "../../../modules/response.mjs";
+import { generateUUID } from "../../../modules/uuid/uuid.mjs";
 
 const loginRouter = express.Router();
 loginRouter.post('/sign-in',async(req,res)=>{

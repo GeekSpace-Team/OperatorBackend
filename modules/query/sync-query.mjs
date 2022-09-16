@@ -146,7 +146,7 @@ export const insertCustomerInterestedProduct = `
 
 export const insertUserRole = `
 INSERT INTO public.user_role(
-    name, created_at, updated_at)
+    id,name, created_at, updated_at)
     VALUES %L RETURNING *;
 `;
 

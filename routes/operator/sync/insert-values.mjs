@@ -1,6 +1,10 @@
-import express from 'express';
-import { badRequest, response } from "../../../modules/response.mjs";
+import express from "express";
+import format from "pg-format";
+import { verifyToken } from "../../../modules/auth/token.mjs";
 import { tables } from "../../../modules/constant/constant.mjs";
+import { db } from "../../../modules/database/connection.mjs";
+import { badRequest, response } from "../../../modules/response.mjs";
+
 import {
     insertCancelReason,
     insertCourier,
@@ -20,12 +24,8 @@ import {
     insertRolePermission,
     insertSellPoint,
     insertSpeakAccent, insertSpeakMode,
-    insertSpeakTone, insertUserRole, insertUsers
+    insertSpeakTone, insertUserRole, insertUsers,insertCalls
 } from "../../../modules/query/sync-query.mjs";
-import { db } from "../../../modules/database/connection.mjs";
-import format from "pg-format";
-import { verifyToken } from "../../../modules/auth/token.mjs";
-import { insertPhoneCall } from '../../../modules/query/operator-query.mjs';
 
 const insertValues = express.Router();
 
@@ -271,9 +271,9 @@ const getValues = async (type, values) => {
     if (type === tables.user_role) {
         await values.forEach((e, i) => {
             const {
-                name, created_at, updated_at
+                id,name, created_at, updated_at
             } = e;
-            result.push([name, created_at, updated_at]);
+            result.push([id,name, created_at, updated_at]);
         })
     }
     if (type === tables.users) {
