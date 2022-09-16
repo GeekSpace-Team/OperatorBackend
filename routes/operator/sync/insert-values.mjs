@@ -101,7 +101,7 @@ const getQuery = (type) => {
     }
 
     if (type === tables.phone_call) {
-        return insertPhoneCall;
+        return insertCalls;
     }
 
 }
