@@ -1,8 +1,8 @@
-import express from 'express';
-import {badRequest, response} from "../../../modules/response.mjs";
-import {db} from "../../../modules/database/connection.mjs";
-import {updateCancelReasonQuery} from "../../../modules/query/admin-query.mjs";
-import {verifyToken} from "../../../modules/auth/token.mjs";
+import express from "express";
+import { verifyToken } from "../../../modules/auth/token.mjs";
+import { db } from "../../../modules/database/connection.mjs";
+import { updateCancelReasonQuery } from "../../../modules/query/admin-query.mjs";
+import { badRequest, response } from "../../../modules/response.mjs";
 
 const updateCancelReason = express.Router();
 
@@ -11,11 +11,10 @@ updateCancelReason.put('/',verifyToken, async (req, res) => {
         badRequest(req, res);
     } else {
         const {
-            sell_point_id,
             value,
             unique_id
         } = req.body;
-        db.query(updateCancelReasonQuery,[sell_point_id,value,unique_id])
+        db.query(updateCancelReasonQuery,[null,value,unique_id])
             .then(result=>{
                 if(result.rows.length){
                     res.json(response(false,'success',result.rows[0]));

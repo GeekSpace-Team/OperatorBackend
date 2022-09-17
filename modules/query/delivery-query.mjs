@@ -114,7 +114,7 @@ export const addMultipleInboxQuery = `
 
 export const getCancelReasonQuery = `
 SELECT id, unique_id, sell_point_id, reason, created_at, updated_at
-	FROM cancel_reason WHERE sell_point_id = $1;
+	FROM cancel_reason;
 `;
 
 

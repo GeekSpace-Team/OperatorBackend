@@ -1,18 +1,17 @@
-import express from 'express';
-import { badRequest, response } from "../../../modules/response.mjs";
-import { db } from "../../../modules/database/connection.mjs";
+import express from "express";
 import format from "pg-format";
+import { verifyToken } from "../../../modules/auth/token.mjs";
+import { db } from "../../../modules/database/connection.mjs";
+import { badRequest, response } from "../../../modules/response.mjs";
+import { generateUUID } from "../../../modules/uuid/uuid.mjs";
+
 import {
     getCancelReasonQuery
 } from "../../../modules/query/delivery-query.mjs";
-import { verifyToken } from '../../../modules/auth/token.mjs';
-import { generateUUID } from '../../../modules/uuid/uuid.mjs';
 const getCancelReasonRouter = express.Router();
 
 getCancelReasonRouter.get('/',verifyToken,(req, res)=>{
-    const id = req.query.id;
-    console.log(id);
-    db.query(getCancelReasonQuery,[id])
+    db.query(getCancelReasonQuery)
     .then(result=>{
         res.json(response(false,'success',result.rows));
         res.end();
