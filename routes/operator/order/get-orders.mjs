@@ -16,9 +16,8 @@ getOrdersRouter.post('/', verifyToken, async (req, res) => {
 
         await db.query(getSellPointId, [req.user.user.unique_id])
             .then(rss => {
-                
-
-                if(rss.rows.length){
+                let sell_point_id=rss.rows[0].sell_point_id;
+                if(rss.rows.length  && typeof sell_point_id!=='undefined' && sell_point_id!=null && sell_point_id!=''){
                     whereQuery=` WHERE uss.sell_point_id=${rss.rows[0].sell_point_id} `;
                 }
                 
