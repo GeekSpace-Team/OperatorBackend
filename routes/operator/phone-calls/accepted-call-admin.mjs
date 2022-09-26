@@ -7,13 +7,29 @@ import { getAcceptedCall, getAcceptedCallAdmin, getAcceptedCallAdminCount, getAc
 import { badRequest, response } from "../../../modules/response.mjs";
 
 const acceptedCallAdminRouter=express.Router();
-acceptedCallAdminRouter.post('/',verifyToken,(req,res) => {
+acceptedCallAdminRouter.post('/',verifyToken,async(req,res) => {
     if(typeof req.body === 'undefined' || req.body == null || typeof req.user === 'undefined' || req.user == null){
         badRequest(req,res);
     } else {
         const {startDate,endDate,incoming,outgoing,sortBy,perPage,page}=req.body;
         let whereQuery='';
         let orderByQuery=' ORDER BY p.created_at DESC ';
+
+
+         await db.query(getSellPointId,[req.user.user.unique_id])
+        .then(result_sell_point => {
+            let sell_point_id=result_sell_point.rows[0].sell_point_id;
+            if(result_sell_point.rows.length && typeof sell_point_id!=='undefined' && sell_point_id!=null && sell_point_id!=''){
+                
+                whereQuery+=' AND u.sell_point_id = '+sell_point_id;
+                console.log(sell_point_id);
+            }
+
+            
+        })
+        .catch(err=>{
+            console.log(err);
+        })
 
         if(startDate != null && startDate !== '' && typeof startDate !== 'undefined'){
             let endD=new Date();
