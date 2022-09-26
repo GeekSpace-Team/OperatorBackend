@@ -12,7 +12,7 @@ getOrdersRouter.post('/', verifyToken, async (req, res) => {
         badRequest(req, res);
     } else {
         const { startDate, endDate, sortBy, perPage, page, search } = req.body;
-        let whereQuery = ` WHERE 1==1 `;
+        let whereQuery = ` WHERE 1=1 `;
 
         await db.query(getSellPointId, [req.user.user.unique_id])
             .then(rss => {
