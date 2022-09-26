@@ -26,7 +26,7 @@ SELECT u.*,r.name as role_name,
 FROM users u 
 LEFT JOIN user_role r ON r.id=u.user_role
 LEFT JOIN sell_point s ON s.id=u.sell_point_id
-WHERE u.username=$1 AND u.password=$2 AND r.name='operator';
+WHERE u.username=$1 AND u.password=$2 AND r.name!='courier';
 `;
 
 export const updateToken = "UPDATE users SET token=$1 WHERE unique_id=$2 RETURNING *";
