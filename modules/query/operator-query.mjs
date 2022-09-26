@@ -118,6 +118,70 @@ WHERE (p.call_state='${callStatus.ACCEPTED}') AND p.user_unique_id=$1
 `;
 
 
+export const getAcceptedCallAdmin = `
+SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,c.address_home,c.address_work,cs.value AS user_status,c.unique_id as customer_unique_id,
+u.fullname AS operator_fullname,sl.name AS sell_point_name,
+(SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number) AS all_call_history_count,
+(SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number) AS call_history
+FROM phone_call p 
+LEFT JOIN customer c ON c.phone_number=p.phone_number
+LEFT JOIN customer_status cs ON cs.id=c.status
+LEFT JOIN users u ON u.unique_id=p.user_unique_id
+LEFT JOIN sell_point sl ON sl.id=u.sell_point_id
+WHERE (p.call_state='${callStatus.ACCEPTED}')
+%s
+%s 
+LIMIT $2 OFFSET ($3 - 1) * $2;
+`;
+
+export const getAcceptedCallAdminCount = `
+SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,c.address_home,c.address_work,cs.value AS user_status,c.unique_id as customer_unique_id,
+u.fullname AS operator_fullname,sl.name AS sell_point_name,
+(SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number) AS all_call_history_count,
+(SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number) AS call_history
+FROM phone_call p 
+LEFT JOIN customer c ON c.phone_number=p.phone_number
+LEFT JOIN customer_status cs ON cs.id=c.status
+LEFT JOIN users u ON u.unique_id=p.user_unique_id
+LEFT JOIN sell_point sl ON sl.id=u.sell_point_id
+WHERE (p.call_state='${callStatus.ACCEPTED}')
+%s
+%s ;
+`;
+
+
+export const getMissedCallAdmin = `
+SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,c.address_home,c.address_work,cs.value AS user_status,c.unique_id as customer_unique_id,
+u.fullname AS operator_fullname,sl.name AS sell_point_name,
+(SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number) AS all_call_history_count,
+(SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number) AS call_history
+FROM phone_call p 
+LEFT JOIN customer c ON c.phone_number=p.phone_number
+LEFT JOIN customer_status cs ON cs.id=c.status
+LEFT JOIN users u ON u.unique_id=p.user_unique_id
+LEFT JOIN sell_point sl ON sl.id=u.sell_point_id
+WHERE (p.call_state='${callStatus.REJECTED}' OR p.call_state='${callStatus.ACCEPTED_AFTER_REJECTED}')
+%s
+%s 
+LIMIT $2 OFFSET ($3 - 1) * $2;
+`;
+
+export const getMissedCallAdminCount = `
+SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,c.address_home,c.address_work,cs.value AS user_status,c.unique_id as customer_unique_id,
+u.fullname AS operator_fullname,sl.name AS sell_point_name,
+(SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number) AS all_call_history_count,
+(SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number) AS call_history
+FROM phone_call p 
+LEFT JOIN customer c ON c.phone_number=p.phone_number
+LEFT JOIN customer_status cs ON cs.id=c.status
+LEFT JOIN users u ON u.unique_id=p.user_unique_id
+LEFT JOIN sell_point sl ON sl.id=u.sell_point_id
+WHERE (p.call_state='${callStatus.REJECTED}' OR p.call_state='${callStatus.ACCEPTED_AFTER_REJECTED}')
+%s
+%s ;
+`;
+
+
 export const addCustomer = `
 INSERT INTO customer(
 	fullname, phone_number, question_mode, find_us, address_home, address_work, information, created_at, updated_at, unique_id, operator_unique_id, speak_mode, status, speak_tone, speak_accent, focus_word)
