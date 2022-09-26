@@ -1,9 +1,9 @@
-import express from 'express';
-import format from 'pg-format';
-import { verifyToken } from '../../../modules/auth/token.mjs';
-import { db } from '../../../modules/database/connection.mjs';
-import { getCustomers, getCustomersPageCount, getOrders, getOrdersCount, getSellPointId } from '../../../modules/query/operator-query.mjs';
-import { badRequest, response } from '../../../modules/response.mjs';
+import express from "express";
+import format from "pg-format";
+import { verifyToken } from "../../../modules/auth/token.mjs";
+import { db } from "../../../modules/database/connection.mjs";
+import { getCustomers, getCustomersPageCount, getOrders, getOrdersCount, getSellPointId } from "../../../modules/query/operator-query.mjs";
+import { badRequest, response } from "../../../modules/response.mjs";
 
 const getOrdersRouter = express.Router();
 
@@ -12,12 +12,25 @@ getOrdersRouter.post('/', verifyToken, async (req, res) => {
         badRequest(req, res);
     } else {
         const { startDate, endDate, sortBy, perPage, page, search } = req.body;
+        let whereQuery = ` WHERE 1==1 `;
 
-
-        db.query(getSellPointId, [req.user.user.unique_id])
+        await db.query(getSellPointId, [req.user.user.unique_id])
             .then(rss => {
-                let whereQuery = ` WHERE uss.sell_point_id=${rss.rows[0].sell_point_id} `;
-                let orderByQuery = ' ORDER BY c.created_at DESC ';
+                
+
+                if(rss.rows.length){
+                    whereQuery=` WHERE uss.sell_point_id=${rss.rows[0].sell_point_id} `;
+                }
+                
+            })
+            .catch(err => {
+                console.log(err);
+                badRequest(req, res);
+                return;
+            })
+
+
+            let orderByQuery = ' ORDER BY c.created_at DESC ';
 
                 if (startDate != null && startDate != '' && typeof startDate !== 'undefined') {
                     let endD = new Date();
@@ -86,11 +99,6 @@ getOrdersRouter.post('/', verifyToken, async (req, res) => {
                         console.log(err);
                         badRequest(req, res);
                     })
-            })
-            .catch(err => {
-                console.log(err);
-                badRequest(req, res);
-            })
 
     }
 })
