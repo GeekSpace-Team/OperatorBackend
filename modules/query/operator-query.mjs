@@ -527,6 +527,15 @@ export const getCouriersByFilter = `
     FROM courier c WHERE c.sell_point_id=$1 OR c.sell_point_id IS NULL;
 `;
 
+export const getCouriersByFilter2 = `
+    SELECT c.*,
+    (SELECT COUNT(cc.id) FROM customer_order_courier_history cc WHERE cc.courier_unique_id=c.unique_id) as order_count,
+    (SELECT cc.customer_order_unique_id FROM customer_order_courier_history cc WHERE cc.courier_unique_id=c.unique_id ORDER BY cc.created_at DESC LIMIT 1) as last_order_id,
+    (SELECT oc.status FROM customer_order_status_history oc WHERE oc.customer_order_unique_id=
+    (SELECT cc.customer_order_unique_id FROM customer_order_courier_history cc WHERE cc.courier_unique_id=c.unique_id ORDER BY cc.created_at DESC LIMIT 1) ORDER BY oc.created_at DESC LIMIT 1) as last_order_status
+    FROM courier c;
+`;
+
 export const addInboxQuery = `
 INSERT INTO inbox(
         title, message, link_to_goal, is_read, is_delete, created_at, updated_at, unique_id, from_unique_id, to_unique_id)
