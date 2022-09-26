@@ -131,7 +131,7 @@ LEFT JOIN sell_point sl ON sl.id=u.sell_point_id
 WHERE (p.call_state='${callStatus.ACCEPTED}')
 %s
 %s 
-LIMIT $2 OFFSET ($3 - 1) * $2;
+LIMIT $1 OFFSET ($2 - 1) * $1;
 `;
 
 export const getAcceptedCallAdminCount = `
@@ -163,7 +163,7 @@ LEFT JOIN sell_point sl ON sl.id=u.sell_point_id
 WHERE (p.call_state='${callStatus.REJECTED}' OR p.call_state='${callStatus.ACCEPTED_AFTER_REJECTED}')
 %s
 %s 
-LIMIT $2 OFFSET ($3 - 1) * $2;
+LIMIT $1 OFFSET ($2 - 1) * $1;
 `;
 
 export const getMissedCallAdminCount = `

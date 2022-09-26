@@ -51,11 +51,11 @@ acceptedCallAdminRouter.post('/',verifyToken,(req,res) => {
 
 
         let query=format(getAcceptedCallAdmin,whereQuery,orderByQuery);
-        db.query(query,[req.user.user.unique_id,perPage,page])
+        db.query(query,[perPage,page])
         .then(result=>{
             if(page==1){
                 let countQuery=format(getAcceptedCallAdminCount,whereQuery,orderByQuery);
-                db.query(countQuery,[req.user.user.unique_id])
+                db.query(countQuery)
                 .then(result_count=>{
                     let page_count = Math.ceil(result_count.rows.length/perPage);
                     if(page_count <= 0){
