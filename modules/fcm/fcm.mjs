@@ -13,6 +13,8 @@ const serverConfig = {
     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-dpxmm%40operator-80283.iam.gserviceaccount.com"
 }
 
+
+
 admin.initializeApp({
     credential: admin.credential.cert(serverConfig)
   })

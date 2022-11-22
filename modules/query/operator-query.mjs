@@ -208,6 +208,8 @@ s2.value AS customer_status_text,
 s3.value AS speak_tone_text,
 s4.value AS speak_accent_text,
 s5.value AS focus_word_text,
+us.fullname AS operator_fullname,
+sl.name AS sell_point_name,
 (SELECT COUNT(o.id) FROM customer_order o WHERE o.customer_unique_id=c.unique_id) AS order_count,
 (SELECT array_to_json(array_agg(p.*)) FROM customer_interested_product p WHERE p.customer_unique_id=c.unique_id) AS interested_products
 FROM customer c
@@ -216,6 +218,8 @@ LEFT JOIN customer_status s2 ON s2.id=c.status
 LEFT JOIN speak_tone s3 ON s3.id=c.speak_tone
 LEFT JOIN speak_accent s4 ON s4.id=c.speak_accent
 LEFT JOIN focus_word s5 ON s5.id=c.focus_word
+LEFT JOIN users us ON us.unique_id=c.operator_unique_id
+LEFT JOIN sell_point sl ON sl.id=us.sell_point_id
 %s
 %s 
 LIMIT $1 OFFSET ($2 - 1) * $1;

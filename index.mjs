@@ -1,11 +1,10 @@
-import express from 'express';
-import cors from 'cors';
-import { router } from './routes/router.mjs';
+import cors from "cors";
+import express from "express";
+import fs from "fs";
+import swaggerJsdoc  from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 import { Server } from "socket.io";
-import fs from 'fs';
-import swaggerUi from 'swagger-ui-express';
-import swaggerJsdoc  from 'swagger-jsdoc';
-
+import { router } from "./routes/router.mjs";
 
 const options = {
     definition:{

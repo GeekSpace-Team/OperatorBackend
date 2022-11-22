@@ -1,6 +1,6 @@
-import {db} from "../database/connection.mjs";
-import {getFcmToken} from "../query/operator-query.mjs";
-import {pusher} from "../fcm/fcm.mjs";
+import { db } from "../database/connection.mjs";
+import { pusher } from "../fcm/fcm.mjs";
+import { getFcmToken } from "../query/operator-query.mjs";
 
 export const sendMessage = async(unique_id,title,body,data) => {
     await db.query(getFcmToken,[unique_id])
@@ -15,15 +15,31 @@ export const sendMessage = async(unique_id,title,body,data) => {
                 const message = {
                     notification: {
                         title: title,
-                        body: body
+                        body: body,
+                        priority: "high",
                     },
                     data: data,
                     tokens: registrationTokens,
                     android: {
-                        priority: 'high'
+                        priority: 'high',
+                        notification: {
+                            sound: 'default',
+                            priority: "high",
+                        }
+                    },
+                      apns: {
+                        payload: {
+                            aps: {
+                                sound: 'default',
+                                priority: "high",
+                            },
+                        },
                     }
                 };
-                pusher.messaging().sendMulticast(message)
+                const options = {
+                    priority: 'high'
+                };
+                pusher.messaging().sendToDevice(registrationTokens,message,options)
                     .then((response)=>{
                         console.log(response.successCount + ' messages were sent successfully');
                     })
