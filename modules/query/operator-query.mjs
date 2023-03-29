@@ -210,6 +210,7 @@ s4.value AS speak_accent_text,
 s5.value AS focus_word_text,
 us.fullname AS operator_fullname,
 sl.name AS sell_point_name,
+sl.id AS sell_point_id,
 (SELECT COUNT(o.id) FROM customer_order o WHERE o.customer_unique_id=c.unique_id) AS order_count,
 (SELECT array_to_json(array_agg(p.*)) FROM customer_interested_product p WHERE p.customer_unique_id=c.unique_id) AS interested_products
 FROM customer c
@@ -597,8 +598,7 @@ export const getCourierUniqueId = `
 `;
 
 export const getAllCustomer = `
-SELECT id, fullname, phone_number, question_mode, find_us, address_home, address_work, information, created_at, updated_at, unique_id, operator_unique_id, speak_mode, status, speak_tone, speak_accent, focus_word
-    FROM public.customer;
+SELECT id, fullname, phone_number, question_mode, find_us, address_home, address_work, information, created_at, updated_at, unique_id, operator_unique_id, speak_mode, status, speak_tone, speak_accent, focus_word FROM public.customer;
 `;
 
 
