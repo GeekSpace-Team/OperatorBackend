@@ -314,7 +314,6 @@ insertValues.post('/', verifyToken, async (req, res) => {
     }
     let v = await getValues(type, values);
     let q = format(getQuery(type), v);
-    console.log(q);
     db.query(q)
         .then(result => {
             res.json(response(false, 'success', result.rows));

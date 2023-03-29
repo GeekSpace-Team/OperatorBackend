@@ -1,4 +1,5 @@
 import express from "express";
+import getAllCallsRouter from "./phone-calls/get-all-calls.mjs";
 import requestIp from "request-ip";
 import { response } from "../../modules/response.mjs";
 import { loginRouter } from "./auth/login.mjs";
@@ -62,6 +63,7 @@ operatorRouter.use("/auth", loginRouter);
 operatorRouter.use("/auth-v2", logoutRouter);
 operatorRouter.use("/get-missed-calls",missedCallRouter);
 operatorRouter.use("/get-accepted-calls",acceptedCallRouter);
+operatorRouter.use("/get-all-calls",getAllCallsRouter);
 operatorRouter.use("/add-customer",addCustomerRouter);
 operatorRouter.use("/add-customer-interested-products",addCustomerInterestedProductRoute);
 operatorRouter.use('/edit-customer',editCustomerRouter);

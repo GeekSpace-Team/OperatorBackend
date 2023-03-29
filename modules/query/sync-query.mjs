@@ -118,10 +118,7 @@ export const getAllOrderStatus = `
 
 
 export const getAllPhoneCalls = `
-SELECT p.*
-	FROM public.phone_call p 
-    LEFT JOIN users u ON u.unique_id=p.user_unique_id
-    WHERE u.sell_point_id=%s;
+SELECT p.* FROM public.phone_call p LEFT JOIN users u ON u.unique_id=p.user_unique_id WHERE u.sell_point_id=%s;
 `;
 
 // CHECKER
@@ -137,6 +134,7 @@ export const insertCustomers = `
         fullname, phone_number, question_mode, address_home, address_work, information, created_at, updated_at, unique_id, operator_unique_id, speak_mode, status, speak_tone, speak_accent, focus_word, find_us)
         VALUES %L RETURNING *;
 `;
+
 
 export const insertCustomerInterestedProduct = `
     INSERT INTO public.customer_interested_product(
