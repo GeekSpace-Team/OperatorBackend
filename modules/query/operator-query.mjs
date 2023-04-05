@@ -119,7 +119,7 @@ WHERE (p.call_state='${callStatus.ACCEPTED}') AND p.user_unique_id=$1
 
 
 export const getAcceptedCallAdmin = `
-SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,c.address_home,c.address_work,cs.value AS user_status,c.unique_id as customer_unique_id,
+SELECT p.*,p.created_at AS call_date, COALESCE(c.fullname, '--------') as user_full_name,c.address_home,c.address_work,cs.value AS user_status,c.unique_id as customer_unique_id,
 u.fullname AS operator_fullname,sl.name AS sell_point_name,
 (SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number) AS all_call_history_count,
 (SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number) AS call_history
@@ -151,7 +151,7 @@ WHERE (p.call_state='${callStatus.ACCEPTED}')
 
 
 export const getMissedCallAdmin = `
-SELECT p.*, COALESCE(c.fullname, '--------') as user_full_name,c.address_home,c.address_work,cs.value AS user_status,c.unique_id as customer_unique_id,
+SELECT p.*,p.created_at AS call_date, COALESCE(c.fullname, '--------') as user_full_name,c.address_home,c.address_work,cs.value AS user_status,c.unique_id as customer_unique_id,
 u.fullname AS operator_fullname,sl.name AS sell_point_name,
 (SELECT COUNT(p3.*) FROM phone_call p3 WHERE p3.phone_number=p.phone_number) AS all_call_history_count,
 (SELECT array_to_json(array_agg(p2.*)) FROM phone_call p2 WHERE p.phone_number=p2.phone_number) AS call_history
